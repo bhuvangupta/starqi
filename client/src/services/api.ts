@@ -123,6 +123,83 @@ class ApiService {
     });
     return response.data;
   }
+
+  // Article endpoints (public)
+  async getArticles(params?: {
+    category?: string;
+    language?: string;
+    limit?: number;
+    offset?: number;
+  }): Promise<{
+    articles: any[];
+    pagination: { total: number; limit: number; offset: number };
+  }> {
+    const response = await this.api.get('/articles', { params });
+    return response.data;
+  }
+
+  async getArticle(slug: string): Promise<{ article: any }> {
+    const response = await this.api.get(`/articles/${slug}`);
+    return response.data;
+  }
+
+  async getCategories(): Promise<{ categories: any[] }> {
+    const response = await this.api.get('/articles/categories');
+    return response.data;
+  }
+
+  // Article endpoints (admin)
+  async getAllArticlesAdmin(params?: {
+    status?: string;
+    limit?: number;
+    offset?: number;
+  }): Promise<{
+    articles: any[];
+    pagination: { total: number; limit: number; offset: number };
+  }> {
+    const response = await this.api.get('/articles/admin/all', { params });
+    return response.data;
+  }
+
+  async createArticle(data: {
+    title: string;
+    slug: string;
+    excerpt?: string;
+    content: string;
+    category?: string;
+    language?: string;
+    author_name?: string;
+    featured_image?: string;
+    tags?: string;
+    status?: string;
+  }): Promise<{ message: string; article: any }> {
+    const response = await this.api.post('/articles/admin/create', data);
+    return response.data;
+  }
+
+  async updateArticle(
+    id: string,
+    data: {
+      title?: string;
+      slug?: string;
+      excerpt?: string;
+      content?: string;
+      category?: string;
+      language?: string;
+      author_name?: string;
+      featured_image?: string;
+      tags?: string;
+      status?: string;
+    }
+  ): Promise<{ message: string; article: any }> {
+    const response = await this.api.put(`/articles/admin/${id}`, data);
+    return response.data;
+  }
+
+  async deleteArticle(id: string): Promise<{ message: string }> {
+    const response = await this.api.delete(`/articles/admin/${id}`);
+    return response.data;
+  }
 }
 
 export const apiService = new ApiService();

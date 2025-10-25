@@ -39,6 +39,12 @@ export const Layout: React.FC = () => {
                 Impact
               </Link>
               <Link
+                to="/blog"
+                className="text-white hover:text-dark-sky-200 transition-colors"
+              >
+                Learn
+              </Link>
+              <Link
                 to="/upload"
                 className="text-white hover:text-dark-sky-200 transition-colors"
               >
@@ -107,19 +113,19 @@ export const Layout: React.FC = () => {
               <h3 className="text-lg font-bold mb-4">Resources</h3>
               <ul className="space-y-2 text-sm text-dark-sky-300">
                 <li>
-                  <a href="#" className="hover:text-white">
-                    How to Measure Sky Quality
-                  </a>
+                  <Link to="/blog" className="hover:text-white">
+                    Learn About Light Pollution
+                  </Link>
                 </li>
                 <li>
-                  <a href="#" className="hover:text-white">
-                    Understanding the Bortle Scale
-                  </a>
+                  <Link to="/blog/how-to-take-night-sky-photos" className="hover:text-white">
+                    How to Take Night Sky Photos
+                  </Link>
                 </li>
                 <li>
-                  <a href="#" className="hover:text-white">
-                    Get an SQM Device
-                  </a>
+                  <Link to="/blog/what-is-light-pollution" className="hover:text-white">
+                    Understanding Light Pollution
+                  </Link>
                 </li>
               </ul>
             </div>

@@ -12,6 +12,7 @@ import { initializeDatabase } from './config/database';
 import authRoutes from './routes/authRoutes';
 import readingsRoutes from './routes/readingsRoutes';
 import statsRoutes from './routes/statsRoutes';
+import articleRoutes from './routes/articleRoutes';
 
 // Load environment variables
 dotenv.config();
@@ -40,6 +41,7 @@ app.use('/uploads', express.static(path.resolve(uploadDir)));
 app.use('/api/auth', authRoutes);
 app.use('/api/readings', readingsRoutes);
 app.use('/api/stats', statsRoutes);
+app.use('/api/articles', articleRoutes);
 
 // Health check
 app.get('/health', (req: Request, res: Response) => {

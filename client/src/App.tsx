@@ -6,6 +6,9 @@ import { HomePage } from './pages/HomePage';
 import { UploadPage } from './pages/UploadPage';
 import { AboutPage } from './pages/AboutPage';
 import { ImpactPage } from './pages/ImpactPage';
+import { BlogPage } from './pages/BlogPage';
+import { ArticleDetailPage } from './pages/ArticleDetailPage';
+import { AdminArticlesPage } from './pages/AdminArticlesPage';
 import { useAuthStore } from './stores/authStore';
 
 const queryClient = new QueryClient({
@@ -33,6 +36,9 @@ function App() {
             <Route path="upload" element={<UploadPage />} />
             <Route path="about" element={<AboutPage />} />
             <Route path="impact" element={<ImpactPage />} />
+            <Route path="blog" element={<BlogPage />} />
+            <Route path="blog/:slug" element={<ArticleDetailPage />} />
+            <Route path="admin/articles" element={<AdminArticlesPage />} />
           </Route>
         </Routes>
       </BrowserRouter>

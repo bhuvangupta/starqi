@@ -10,6 +10,7 @@ import { SqmDevice } from '../models/SqmDevice';
 import { Location } from '../models/Location';
 import { Contribution } from '../models/Contribution';
 import { ImpactMetric } from '../models/ImpactMetric';
+import { Article } from '../models/Article';
 
 dotenv.config();
 
@@ -22,7 +23,7 @@ export const AppDataSource = new DataSource({
   database: process.env.DB_DATABASE || 'starqi',
   synchronize: process.env.NODE_ENV === 'development', // Auto-sync in dev only
   logging: process.env.NODE_ENV === 'development',
-  entities: [User, SkyReading, PhotoUpload, SqmDevice, Location, Contribution, ImpactMetric],
+  entities: [User, SkyReading, PhotoUpload, SqmDevice, Location, Contribution, ImpactMetric, Article],
   migrations: [path.join(__dirname, '../migrations/*.ts')],
   subscribers: [],
 });
