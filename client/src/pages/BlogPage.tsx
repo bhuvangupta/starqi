@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { apiService } from '../services/api';
 
 interface Article {
@@ -21,11 +22,12 @@ interface Category {
 }
 
 export const BlogPage = () => {
+  const { t, i18n } = useTranslation();
   const [articles, setArticles] = useState<Article[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedCategory, setSelectedCategory] = useState<string>('');
-  const [selectedLanguage, setSelectedLanguage] = useState<string>('en');
+  const [selectedLanguage, setSelectedLanguage] = useState<string>(i18n.language || 'en');
   const [pagination, setPagination] = useState({ total: 0, limit: 10, offset: 0 });
 
   useEffect(() => {
@@ -84,15 +86,15 @@ export const BlogPage = () => {
   };
 
   const getCategoryLabel = (category: string) => {
-    const labels: { [key: string]: string } = {
-      basics: 'Basics',
-      science: 'Science',
-      'how-to': 'How To',
-      impact: 'Impact',
-      action: 'Take Action',
-      news: 'News',
+    const categoryMap: { [key: string]: string } = {
+      basics: 'categories.basics',
+      science: 'categories.science',
+      'how-to': 'categories.howTo',
+      impact: 'categories.impact',
+      action: 'categories.action',
+      news: 'categories.news',
     };
-    return labels[category] || category;
+    return t(categoryMap[category] || category);
   };
 
   const totalPages = Math.ceil(pagination.total / pagination.limit);
@@ -103,9 +105,9 @@ export const BlogPage = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold text-gray-900 mb-4">Learn About Light Pollution</h1>
+          <h1 className="text-4xl font-bold text-gray-900 mb-4">{t('blog.title')}</h1>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-            Explore articles, guides, and resources about light pollution, dark skies, and how you can make a difference.
+            {t('blog.subtitle')}
           </p>
         </div>
 
@@ -114,7 +116,7 @@ export const BlogPage = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {/* Language Filter */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Language</label>
+              <label className="block text-sm font-medium text-gray-700 mb-2">{t('blog.language')}</label>
               <div className="flex gap-3">
                 <button
                   onClick={() => handleLanguageChange('en')}
@@ -124,7 +126,7 @@ export const BlogPage = () => {
                       : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
                   }`}
                 >
-                  English
+                  {t('blog.english')}
                 </button>
                 <button
                   onClick={() => handleLanguageChange('hi')}
@@ -134,20 +136,20 @@ export const BlogPage = () => {
                       : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
                   }`}
                 >
-                  हिंदी (Hindi)
+                  {t('blog.hindi')}
                 </button>
               </div>
             </div>
 
             {/* Category Filter */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Category</label>
+              <label className="block text-sm font-medium text-gray-700 mb-2">{t('blog.category')}</label>
               <select
                 value={selectedCategory}
                 onChange={(e) => handleCategoryChange(e.target.value)}
                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
               >
-                <option value="">All Categories</option>
+                <option value="">{t('blog.allCategories')}</option>
                 {categories.map((cat) => (
                   <option key={cat.category} value={cat.category}>
                     {getCategoryLabel(cat.category)} ({cat.count})
@@ -162,11 +164,11 @@ export const BlogPage = () => {
         {loading ? (
           <div className="text-center py-12">
             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600 mx-auto"></div>
-            <p className="text-gray-600 mt-4">Loading articles...</p>
+            <p className="text-gray-600 mt-4">{t('blog.loadingArticles')}</p>
           </div>
         ) : articles.length === 0 ? (
           <div className="text-center py-12">
-            <p className="text-gray-600 text-lg">No articles found for the selected filters.</p>
+            <p className="text-gray-600 text-lg">{t('blog.noArticles')}</p>
           </div>
         ) : (
           <>
@@ -193,7 +195,7 @@ export const BlogPage = () => {
                       <span className="px-3 py-1 bg-indigo-100 text-indigo-700 text-xs font-semibold rounded-full">
                         {getCategoryLabel(article.category)}
                       </span>
-                      <span className="text-xs text-gray-500">{article.view_count} views</span>
+                      <span className="text-xs text-gray-500">{article.view_count} {t('blog.views')}</span>
                     </div>
                     <h2 className="text-xl font-bold text-gray-900 mb-2 line-clamp-2">
                       {article.title}
@@ -218,17 +220,17 @@ export const BlogPage = () => {
                   disabled={currentPage === 1}
                   className="px-4 py-2 bg-white border border-gray-300 rounded-lg font-medium text-gray-700 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                  Previous
+                  {t('blog.previous')}
                 </button>
                 <span className="text-gray-700">
-                  Page {currentPage} of {totalPages}
+                  {t('blog.page')} {currentPage} {t('blog.of')} {totalPages}
                 </span>
                 <button
                   onClick={() => handlePageChange(pagination.offset + pagination.limit)}
                   disabled={currentPage === totalPages}
                   className="px-4 py-2 bg-white border border-gray-300 rounded-lg font-medium text-gray-700 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                  Next
+                  {t('blog.next')}
                 </button>
               </div>
             )}

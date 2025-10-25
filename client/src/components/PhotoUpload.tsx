@@ -1,5 +1,6 @@
 import React, { useState, useCallback } from 'react';
 import { useDropzone } from 'react-dropzone';
+import { useTranslation } from 'react-i18next';
 import { apiService } from '../services/api';
 import { SkyReading, LightPollutionLevel } from '../types';
 
@@ -12,6 +13,7 @@ interface LocationData {
 }
 
 export const PhotoUpload: React.FC = () => {
+  const { t } = useTranslation();
   const [file, setFile] = useState<File | null>(null);
   const [preview, setPreview] = useState<string | null>(null);
   const [location, setLocation] = useState<LocationData>({
@@ -59,24 +61,24 @@ export const PhotoUpload: React.FC = () => {
           setGettingLocation(false);
         },
         (error) => {
-          setError('Failed to get location: ' + error.message);
+          setError(t('upload.errorFailedToGetLocation') + error.message);
           setGettingLocation(false);
         }
       );
     } else {
-      setError('Geolocation is not supported by your browser');
+      setError(t('upload.errorGeolocationNotSupported'));
       setGettingLocation(false);
     }
   };
 
   const handleUpload = async () => {
     if (!file) {
-      setError('Please select a file');
+      setError(t('upload.errorSelectFile'));
       return;
     }
 
     if (location.latitude === 0 && location.longitude === 0) {
-      setError('Please provide location information');
+      setError(t('upload.errorProvideLocation'));
       return;
     }
 
@@ -96,7 +98,7 @@ export const PhotoUpload: React.FC = () => {
       setResult(response.reading);
       setLoading(false);
     } catch (err: any) {
-      setError(err.response?.data?.error || 'Failed to upload photo');
+      setError(err.response?.data?.error || t('upload.errorUploadFailed'));
       setLoading(false);
     }
   };
@@ -115,7 +117,7 @@ export const PhotoUpload: React.FC = () => {
   return (
     <div className="max-w-4xl mx-auto p-6 space-y-6">
       <div className="bg-white rounded-lg shadow-lg p-6">
-        <h2 className="text-2xl font-bold mb-4 text-gray-800">Upload Sky Photo</h2>
+        <h2 className="text-2xl font-bold mb-4 text-gray-800">{t('upload.uploadSkyPhoto')}</h2>
 
         {/* File Upload */}
         <div
@@ -134,7 +136,7 @@ export const PhotoUpload: React.FC = () => {
                 alt="Preview"
                 className="max-h-64 mx-auto rounded-lg mb-4"
               />
-              <p className="text-sm text-gray-600">Click or drag to replace</p>
+              <p className="text-sm text-gray-600">{t('upload.clickOrDragToReplace')}</p>
             </div>
           ) : (
             <div>
@@ -153,11 +155,11 @@ export const PhotoUpload: React.FC = () => {
               </svg>
               <p className="mt-2 text-sm text-gray-600">
                 {isDragActive
-                  ? 'Drop the image here'
-                  : 'Drag & drop a sky photo, or click to select'}
+                  ? t('upload.dropImageHere')
+                  : t('upload.dragAndDropMessage')}
               </p>
               <p className="text-xs text-gray-500 mt-1">
-                JPG or PNG up to 10MB
+                {t('upload.fileSizeLimit')}
               </p>
             </div>
           )}
@@ -171,14 +173,14 @@ export const PhotoUpload: React.FC = () => {
               disabled={gettingLocation}
               className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:bg-gray-400"
             >
-              {gettingLocation ? 'Getting Location...' : 'Use Current Location'}
+              {gettingLocation ? t('upload.gettingLocation') : t('upload.useCurrentLocation')}
             </button>
           </div>
 
           <div className="grid grid-cols-2 gap-4">
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
-                Latitude
+                {t('upload.latitude')}
               </label>
               <input
                 type="number"
@@ -193,7 +195,7 @@ export const PhotoUpload: React.FC = () => {
             </div>
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
-                Longitude
+                {t('upload.longitude')}
               </label>
               <input
                 type="number"
@@ -211,7 +213,7 @@ export const PhotoUpload: React.FC = () => {
           <div className="grid grid-cols-3 gap-4">
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
-                Location Name
+                {t('upload.locationName')}
               </label>
               <input
                 type="text"
@@ -220,24 +222,24 @@ export const PhotoUpload: React.FC = () => {
                   setLocation({ ...location, location_name: e.target.value })
                 }
                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
-                placeholder="e.g., Desert National Park"
+                placeholder={t('upload.locationNamePlaceholder')}
               />
             </div>
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
-                City
+                {t('upload.city')}
               </label>
               <input
                 type="text"
                 value={location.city}
                 onChange={(e) => setLocation({ ...location, city: e.target.value })}
                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
-                placeholder="e.g., Phoenix"
+                placeholder={t('upload.cityPlaceholder')}
               />
             </div>
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
-                Country
+                {t('upload.country')}
               </label>
               <input
                 type="text"
@@ -246,7 +248,7 @@ export const PhotoUpload: React.FC = () => {
                   setLocation({ ...location, country: e.target.value })
                 }
                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
-                placeholder="e.g., USA"
+                placeholder={t('upload.countryPlaceholder')}
               />
             </div>
           </div>
@@ -265,18 +267,18 @@ export const PhotoUpload: React.FC = () => {
           disabled={!file || loading}
           className="mt-6 w-full px-6 py-3 bg-green-600 text-white font-semibold rounded-lg hover:bg-green-700 disabled:bg-gray-400 disabled:cursor-not-allowed"
         >
-          {loading ? 'Analyzing...' : 'Upload & Analyze'}
+          {loading ? t('upload.analyzing') : t('upload.uploadAndAnalyze')}
         </button>
       </div>
 
       {/* Results */}
       {result && (
         <div className="bg-white rounded-lg shadow-lg p-6">
-          <h3 className="text-xl font-bold mb-4 text-gray-800">Analysis Results</h3>
+          <h3 className="text-xl font-bold mb-4 text-gray-800">{t('upload.analysisResults')}</h3>
 
           <div className="space-y-4">
             <div className="flex items-center justify-between">
-              <span className="text-gray-700 font-medium">Light Pollution Level:</span>
+              <span className="text-gray-700 font-medium">{t('upload.lightPollutionLevel')}</span>
               <span
                 className={`px-4 py-2 rounded-full font-semibold uppercase text-sm ${getPollutionColor(
                   result.light_pollution_level
@@ -288,45 +290,45 @@ export const PhotoUpload: React.FC = () => {
 
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
               <div className="bg-gray-50 p-4 rounded-lg">
-                <p className="text-sm text-gray-600">SQM Value</p>
+                <p className="text-sm text-gray-600">{t('upload.sqmValue')}</p>
                 <p className="text-2xl font-bold text-gray-900">
                   {result.sqm_value?.toFixed(2)}
                 </p>
-                <p className="text-xs text-gray-500">mag/arcsec²</p>
+                <p className="text-xs text-gray-500">{t('upload.sqmUnit')}</p>
               </div>
 
               <div className="bg-gray-50 p-4 rounded-lg">
-                <p className="text-sm text-gray-600">Bortle Scale</p>
+                <p className="text-sm text-gray-600">{t('upload.bortleScale')}</p>
                 <p className="text-2xl font-bold text-gray-900">
                   {result.bortle_scale}
                 </p>
-                <p className="text-xs text-gray-500">Class 1-9</p>
+                <p className="text-xs text-gray-500">{t('upload.bortleDescription')}</p>
               </div>
 
               <div className="bg-gray-50 p-4 rounded-lg">
-                <p className="text-sm text-gray-600">Stars Detected</p>
+                <p className="text-sm text-gray-600">{t('upload.starsDetected')}</p>
                 <p className="text-2xl font-bold text-gray-900">
                   {result.star_count}
                 </p>
-                <p className="text-xs text-gray-500">visible stars</p>
+                <p className="text-xs text-gray-500">{t('upload.starsUnit')}</p>
               </div>
 
               <div className="bg-gray-50 p-4 rounded-lg">
-                <p className="text-sm text-gray-600">Sky Brightness</p>
+                <p className="text-sm text-gray-600">{t('upload.skyBrightness')}</p>
                 <p className="text-2xl font-bold text-gray-900">
                   {result.sky_brightness?.toFixed(1)}
                 </p>
-                <p className="text-xs text-gray-500">luminance</p>
+                <p className="text-xs text-gray-500">{t('upload.brightnessUnit')}</p>
               </div>
             </div>
 
             <div className="mt-4 p-4 bg-blue-50 border border-blue-200 rounded-lg">
               <p className="text-sm text-blue-900">
-                <strong>Location:</strong>{' '}
+                <strong>{t('upload.locationLabel')}</strong>{' '}
                 {result.location_name || `${result.latitude}, ${result.longitude}`}
               </p>
               <p className="text-sm text-blue-900 mt-1">
-                <strong>Reading ID:</strong> {result.id}
+                <strong>{t('upload.readingId')}</strong> {result.id}
               </p>
             </div>
           </div>

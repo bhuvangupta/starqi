@@ -1,9 +1,12 @@
 import React from 'react';
 import { Link, Outlet } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { useAuthStore } from '../stores/authStore';
+import { LanguageSwitcher } from './LanguageSwitcher';
 
 export const Layout: React.FC = () => {
   const { isAuthenticated, user, logout } = useAuthStore();
+  const { t } = useTranslation();
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -24,48 +27,49 @@ export const Layout: React.FC = () => {
                 to="/"
                 className="text-white hover:text-dark-sky-200 transition-colors"
               >
-                Home
+                {t('nav.home')}
               </Link>
               <Link
                 to="/about"
                 className="text-white hover:text-dark-sky-200 transition-colors"
               >
-                About
+                {t('nav.about')}
               </Link>
               <Link
                 to="/impact"
                 className="text-white hover:text-dark-sky-200 transition-colors"
               >
-                Impact
+                {t('nav.impact')}
               </Link>
               <Link
                 to="/blog"
                 className="text-white hover:text-dark-sky-200 transition-colors"
               >
-                Learn
+                {t('nav.learn')}
               </Link>
               <Link
                 to="/upload"
                 className="text-white hover:text-dark-sky-200 transition-colors"
               >
-                Upload
+                {t('nav.upload')}
               </Link>
               <a
                 href="/#map"
                 className="text-white hover:text-dark-sky-200 transition-colors"
               >
-                Map
+                {t('nav.map')}
               </a>
+              <LanguageSwitcher />
               {isAuthenticated ? (
                 <div className="flex items-center gap-4">
                   <span className="text-dark-sky-300">
-                    Hi, {user?.username}
+                    {t('nav.hi')}, {user?.username}
                   </span>
                   <button
                     onClick={logout}
                     className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors"
                   >
-                    Logout
+                    {t('nav.logout')}
                   </button>
                 </div>
               ) : (
@@ -73,7 +77,7 @@ export const Layout: React.FC = () => {
                   to="/login"
                   className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
                 >
-                  Login
+                  {t('nav.login')}
                 </Link>
               )}
             </nav>
@@ -91,67 +95,66 @@ export const Layout: React.FC = () => {
         <div className="container mx-auto px-4 py-8">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             <div>
-              <h3 className="text-lg font-bold mb-4">About StarQI</h3>
+              <h3 className="text-lg font-bold mb-4">{t('footer.aboutStarQI')}</h3>
               <p className="text-dark-sky-300 text-sm mb-3">
-                A global platform for measuring and tracking light pollution through citizen
-                science and sky quality monitoring.
+                {t('footer.aboutDescription')}
               </p>
               <ul className="space-y-2 text-sm text-dark-sky-300">
                 <li>
                   <Link to="/about" className="hover:text-white">
-                    Our Story
+                    {t('footer.ourStory')}
                   </Link>
                 </li>
                 <li>
                   <Link to="/impact" className="hover:text-white">
-                    Impact Dashboard
+                    {t('footer.impactDashboard')}
                   </Link>
                 </li>
               </ul>
             </div>
             <div>
-              <h3 className="text-lg font-bold mb-4">Resources</h3>
+              <h3 className="text-lg font-bold mb-4">{t('footer.resources')}</h3>
               <ul className="space-y-2 text-sm text-dark-sky-300">
                 <li>
                   <Link to="/blog" className="hover:text-white">
-                    Learn About Light Pollution
+                    {t('footer.learnAboutLightPollution')}
                   </Link>
                 </li>
                 <li>
                   <Link to="/blog/how-to-take-night-sky-photos" className="hover:text-white">
-                    How to Take Night Sky Photos
+                    {t('footer.howToTakePhotos')}
                   </Link>
                 </li>
                 <li>
                   <Link to="/blog/what-is-light-pollution" className="hover:text-white">
-                    Understanding Light Pollution
+                    {t('footer.understandingLightPollution')}
                   </Link>
                 </li>
               </ul>
             </div>
             <div>
-              <h3 className="text-lg font-bold mb-4">Connect</h3>
+              <h3 className="text-lg font-bold mb-4">{t('footer.connect')}</h3>
               <ul className="space-y-2 text-sm text-dark-sky-300">
                 <li>
                   <a href="#" className="hover:text-white">
-                    GitHub
+                    {t('footer.github')}
                   </a>
                 </li>
                 <li>
                   <a href="#" className="hover:text-white">
-                    Twitter
+                    {t('footer.twitter')}
                   </a>
                 </li>
                 <li>
                   <a href="#" className="hover:text-white">
-                    Contact Us
+                    {t('footer.contactUs')}
                   </a>
                 </li>
               </ul>
             </div>
           </div>
           <div className="border-t border-dark-sky-800 mt-8 pt-8 text-center text-sm text-dark-sky-400">
-            <p>&copy; 2025 StarQI. Preserving our view of the stars.</p>
+            <p>{t('footer.copyright')}</p>
           </div>
         </div>
       </footer>

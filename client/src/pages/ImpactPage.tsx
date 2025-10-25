@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { apiService } from '../services/api';
+import { useTranslation } from 'react-i18next';
 import {
   LineChart,
   Line,
@@ -39,6 +40,7 @@ interface ImpactData {
 }
 
 export const ImpactPage: React.FC = () => {
+  const { t } = useTranslation();
   const [data, setData] = useState<ImpactData | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -63,7 +65,7 @@ export const ImpactPage: React.FC = () => {
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
           <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-indigo-600 mx-auto mb-4"></div>
-          <p className="text-gray-600">Loading impact data...</p>
+          <p className="text-gray-600">{t('impact.loadingImpactData')}</p>
         </div>
       </div>
     );
@@ -73,7 +75,7 @@ export const ImpactPage: React.FC = () => {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center text-red-600">
-          <p>{error || 'Failed to load data'}</p>
+          <p>{error || t('impact.failedToLoadData')}</p>
         </div>
       </div>
     );
@@ -85,49 +87,49 @@ export const ImpactPage: React.FC = () => {
         {/* Header */}
         <div className="text-center mb-12">
           <h1 className="text-5xl font-bold mb-4 bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
-            StarQI Impact Dashboard
+            {t('impact.dashboardTitle')}
           </h1>
           <p className="text-xl text-gray-600">
-            Measuring our collective progress in fighting light pollution
+            {t('impact.dashboardSubtitle')}
           </p>
         </div>
 
         {/* Community Metrics */}
         <section className="mb-12">
-          <h2 className="text-3xl font-bold mb-6 text-gray-800">Community Metrics</h2>
+          <h2 className="text-3xl font-bold mb-6 text-gray-800">{t('impact.communityMetrics')}</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             <MetricCard
-              title="Total Users"
+              title={t('impact.totalUsers')}
               value={data.community.totalUsers.toLocaleString()}
               icon="👥"
               color="indigo"
             />
             <MetricCard
-              title="Total Readings"
+              title={t('impact.totalReadings')}
               value={data.community.totalReadings.toLocaleString()}
               icon="📊"
               color="purple"
             />
             <MetricCard
-              title="Countries Reached"
+              title={t('impact.countriesReached')}
               value={data.community.countries}
               icon="🌍"
               color="pink"
             />
             <MetricCard
-              title="Cities in India"
+              title={t('impact.citiesInIndia')}
               value={data.community.citiesInIndia}
               icon="🇮🇳"
               color="blue"
             />
             <MetricCard
-              title="Active This Month"
+              title={t('impact.activeThisMonth')}
               value={data.community.activeThisMonth.toLocaleString()}
               icon="✨"
               color="green"
             />
             <MetricCard
-              title="Avg. Readings/User"
+              title={t('impact.avgReadingsPerUser')}
               value={(
                 data.community.totalReadings / Math.max(data.community.totalUsers, 1)
               ).toFixed(1)}
@@ -139,28 +141,28 @@ export const ImpactPage: React.FC = () => {
 
         {/* Community Impact (Manual Metrics) */}
         <section className="mb-12">
-          <h2 className="text-3xl font-bold mb-6 text-gray-800">Community Impact</h2>
+          <h2 className="text-3xl font-bold mb-6 text-gray-800">{t('impact.communityImpact')}</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             <MetricCard
-              title="Schools Partnered"
+              title={t('impact.schoolsPartnered')}
               value={data.manual.schools}
               icon="🏫"
               color="indigo"
             />
             <MetricCard
-              title="Workshops Conducted"
+              title={t('impact.workshopsConducted')}
               value={data.manual.workshops}
               icon="🎓"
               color="purple"
             />
             <MetricCard
-              title="Students Engaged"
+              title={t('impact.studentsEngaged')}
               value={data.manual.studentsEngaged.toLocaleString()}
               icon="🎒"
               color="pink"
             />
             <MetricCard
-              title="Media Mentions"
+              title={t('impact.mediaMentions')}
               value={data.manual.mediaMentions}
               icon="📰"
               color="blue"
@@ -170,12 +172,12 @@ export const ImpactPage: React.FC = () => {
 
         {/* Growth Charts */}
         <section className="mb-12">
-          <h2 className="text-3xl font-bold mb-6 text-gray-800">Growth Over Time</h2>
+          <h2 className="text-3xl font-bold mb-6 text-gray-800">{t('impact.growthOverTime')}</h2>
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
             {/* Readings Growth */}
             <div className="bg-white rounded-xl shadow-lg p-6">
               <h3 className="text-xl font-bold mb-4 text-gray-800">
-                Readings by Month
+                {t('impact.readingsByMonth')}
               </h3>
               <ResponsiveContainer width="100%" height={300}>
                 <LineChart data={data.growth.readingsByMonth}>
@@ -189,7 +191,7 @@ export const ImpactPage: React.FC = () => {
                     dataKey="count"
                     stroke="#6366f1"
                     strokeWidth={3}
-                    name="Readings"
+                    name={t('impact.readings')}
                   />
                 </LineChart>
               </ResponsiveContainer>
@@ -197,7 +199,7 @@ export const ImpactPage: React.FC = () => {
 
             {/* Users Growth */}
             <div className="bg-white rounded-xl shadow-lg p-6">
-              <h3 className="text-xl font-bold mb-4 text-gray-800">Users by Month</h3>
+              <h3 className="text-xl font-bold mb-4 text-gray-800">{t('impact.usersByMonth')}</h3>
               <ResponsiveContainer width="100%" height={300}>
                 <LineChart data={data.growth.usersByMonth}>
                   <CartesianGrid strokeDasharray="3 3" />
@@ -210,7 +212,7 @@ export const ImpactPage: React.FC = () => {
                     dataKey="count"
                     stroke="#a855f7"
                     strokeWidth={3}
-                    name="Users"
+                    name={t('impact.users')}
                   />
                 </LineChart>
               </ResponsiveContainer>
@@ -221,13 +223,13 @@ export const ImpactPage: React.FC = () => {
         {/* Geographic Distribution */}
         <section className="mb-12">
           <h2 className="text-3xl font-bold mb-6 text-gray-800">
-            Geographic Distribution
+            {t('impact.geographicDistribution')}
           </h2>
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
             {/* Top Cities Globally */}
             <div className="bg-white rounded-xl shadow-lg p-6">
               <h3 className="text-xl font-bold mb-4 text-gray-800">
-                Top 10 Cities Worldwide
+                {t('impact.top10CitiesWorldwide')}
               </h3>
               <ResponsiveContainer width="100%" height={400}>
                 <BarChart data={data.geographic.topCities}>
@@ -235,7 +237,7 @@ export const ImpactPage: React.FC = () => {
                   <XAxis dataKey="city" angle={-45} textAnchor="end" height={100} />
                   <YAxis />
                   <Tooltip />
-                  <Bar dataKey="count" fill="#6366f1" name="Readings" />
+                  <Bar dataKey="count" fill="#6366f1" name={t('impact.readings')} />
                 </BarChart>
               </ResponsiveContainer>
             </div>
@@ -243,7 +245,7 @@ export const ImpactPage: React.FC = () => {
             {/* Top Cities in India */}
             <div className="bg-white rounded-xl shadow-lg p-6">
               <h3 className="text-xl font-bold mb-4 text-gray-800">
-                Top 10 Cities in India 🇮🇳
+                {t('impact.top10CitiesInIndia')} 🇮🇳
               </h3>
               <ResponsiveContainer width="100%" height={400}>
                 <BarChart data={data.geographic.topIndianCities}>
@@ -251,7 +253,7 @@ export const ImpactPage: React.FC = () => {
                   <XAxis dataKey="city" angle={-45} textAnchor="end" height={100} />
                   <YAxis />
                   <Tooltip />
-                  <Bar dataKey="count" fill="#ec4899" name="Readings" />
+                  <Bar dataKey="count" fill="#ec4899" name={t('impact.readings')} />
                 </BarChart>
               </ResponsiveContainer>
             </div>
@@ -262,7 +264,7 @@ export const ImpactPage: React.FC = () => {
         <section className="mb-12">
           <div className="bg-white rounded-xl shadow-lg p-6">
             <h3 className="text-xl font-bold mb-4 text-gray-800">
-              Top 10 Countries by Readings
+              {t('impact.top10CountriesByReadings')}
             </h3>
             <ResponsiveContainer width="100%" height={400}>
               <BarChart
@@ -273,7 +275,7 @@ export const ImpactPage: React.FC = () => {
                 <XAxis type="number" />
                 <YAxis dataKey="country" type="category" width={100} />
                 <Tooltip />
-                <Bar dataKey="count" fill="#a855f7" name="Readings" />
+                <Bar dataKey="count" fill="#a855f7" name={t('impact.readings')} />
               </BarChart>
             </ResponsiveContainer>
           </div>
@@ -281,23 +283,22 @@ export const ImpactPage: React.FC = () => {
 
         {/* Call to Action */}
         <section className="bg-gradient-to-r from-indigo-600 to-purple-600 rounded-2xl p-10 text-white text-center">
-          <h2 className="text-3xl font-bold mb-4">Be Part of the Change</h2>
+          <h2 className="text-3xl font-bold mb-4">{t('impact.bePartOfTheChange')}</h2>
           <p className="text-xl mb-8 text-indigo-100">
-            Every reading contributes to our understanding of light pollution and helps
-            drive environmental action
+            {t('impact.bePartDescription')}
           </p>
           <div className="flex justify-center space-x-4">
             <a
               href="/upload"
               className="bg-white text-indigo-600 px-8 py-3 rounded-lg hover:bg-indigo-50 transition-colors font-semibold"
             >
-              Upload Your Reading
+              {t('impact.uploadYourReading')}
             </a>
             <a
               href="/map"
               className="bg-indigo-700 text-white px-8 py-3 rounded-lg hover:bg-indigo-800 transition-colors font-semibold"
             >
-              View Global Map
+              {t('impact.viewGlobalMap')}
             </a>
           </div>
         </section>
