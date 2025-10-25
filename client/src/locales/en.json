@@ -27,11 +27,21 @@
   },
   "home": {
     "title": "StarQI - Light Pollution Portal",
+    "heroTitle": "StarQI - Light Pollution Portal",
+    "heroSubtitle": "Measure, track, and visualize light pollution worldwide",
+    "heroDescription": "Upload photos of the night sky to analyze sky quality, or explore global light pollution data from our community. Help preserve our view of the stars.",
     "subtitle": "Measure, Track, and Combat Light Pollution",
     "description": "Join thousands of citizens worldwide in mapping light pollution and protecting our night skies.",
+    "uploadSkyPhoto": "Upload Sky Photo",
     "uploadPhoto": "Upload Photo",
+    "exploreMap": "Explore Map",
     "viewMap": "View Map",
-    "learnMore": "Learn More"
+    "learnMore": "Learn More",
+    "globalStatistics": "Global Statistics",
+    "lightPollutionMap": "Light Pollution Map",
+    "contributeToOurMission": "Contribute to Our Mission",
+    "contributeDescription": "Join thousands of sky quality enthusiasts worldwide. Upload your night sky photos and help create a comprehensive global light pollution database.",
+    "getStarted": "Get Started"
   },
   "about": {
     "heroTitle1": "Measuring Light Pollution,",
