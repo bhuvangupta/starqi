@@ -3,13 +3,25 @@ import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { Dashboard } from '../components/Dashboard';
 import { LightPollutionMap } from '../components/LightPollutionMap';
+import { SEO } from '../components/SEO';
+import { StructuredData, createOrganizationSchema, createWebsiteSchema } from '../components/StructuredData';
 
 export const HomePage: React.FC = () => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
 
   return (
-    <div className="space-y-8">
-      {/* Hero Section */}
+    <>
+      <SEO
+        title="SkyQI - Light Pollution Portal"
+        description={t('home.heroDescription')}
+        keywords="light pollution, sky quality, dark sky, astronomy, citizen science, SQM, Bortle scale, night sky, stargazing, environmental monitoring"
+        url="/"
+        locale={i18n.language}
+      />
+      <StructuredData data={[createOrganizationSchema(), createWebsiteSchema()]} />
+
+      <div className="space-y-8">
+        {/* Hero Section */}
       <div className="bg-gradient-to-r from-dark-sky-900 to-dark-sky-800 text-white rounded-lg shadow-xl p-8 md:p-12">
         <h1 className="text-4xl md:text-5xl font-bold mb-4">
           {t('home.heroTitle')}
@@ -61,6 +73,7 @@ export const HomePage: React.FC = () => {
           {t('home.getStarted')}
         </Link>
       </div>
-    </div>
+      </div>
+    </>
   );
 };

@@ -1,0 +1,71 @@
+# robots.txt for SkyQI - Light Pollution Portal
+
+# Allow all crawlers
+User-agent: *
+Allow: /
+
+# Disallow admin pages
+Disallow: /admin/
+Disallow: /api/
+
+# Disallow URL parameters that don't affect content
+Disallow: /*?sort=*
+Disallow: /*?filter=*
+Disallow: /*&sort=*
+Disallow: /*&filter=*
+
+# Sitemap location
+Sitemap: https://skyqi.in/sitemap.xml
+
+# Crawl delay (optional, adjust if needed)
+Crawl-delay: 1
+
+# Specific bot configurations
+User-agent: Googlebot
+Allow: /
+Crawl-delay: 0
+
+User-agent: Bingbot
+Allow: /
+Crawl-delay: 1
+
+User-agent: Slurp
+Allow: /
+
+# AI Crawlers (for GEO/AEO)
+User-agent: GPTBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: anthropic-ai
+Allow: /
+
+User-agent: Applebot
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: YouBot
+Allow: /
+
+# Social Media Bots
+User-agent: facebookexternalhit
+Allow: /
+
+User-agent: Twitterbot
+Allow: /
+
+User-agent: LinkedInBot
+Allow: /
+
+User-agent: WhatsApp
+Allow: /

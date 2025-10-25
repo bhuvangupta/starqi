@@ -13,6 +13,8 @@ import {
   Legend,
   ResponsiveContainer,
 } from 'recharts';
+import { SEO } from '../components/SEO';
+import { StructuredData, createBreadcrumbSchema } from '../components/StructuredData';
 
 interface ImpactData {
   community: {
@@ -40,7 +42,7 @@ interface ImpactData {
 }
 
 export const ImpactPage: React.FC = () => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const [data, setData] = useState<ImpactData | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -81,10 +83,25 @@ export const ImpactPage: React.FC = () => {
     );
   }
 
+  const breadcrumbs = createBreadcrumbSchema([
+    { name: 'Home', url: '/' },
+    { name: 'Impact', url: '/impact' },
+  ]);
+
   return (
-    <div className="min-h-screen bg-gray-50 py-12">
-      <div className="max-w-7xl mx-auto px-4">
-        {/* Header */}
+    <>
+      <SEO
+        title={t('impact.dashboardTitle')}
+        description={t('impact.dashboardSubtitle')}
+        keywords="light pollution impact, citizen science statistics, global sky quality data, environmental impact dashboard, light pollution metrics"
+        url="/impact"
+        locale={i18n.language}
+      />
+      <StructuredData data={breadcrumbs} />
+
+      <div className="min-h-screen bg-gray-50 py-12">
+        <div className="max-w-7xl mx-auto px-4">
+          {/* Header */}
         <div className="text-center mb-12">
           <h1 className="text-5xl font-bold mb-4 bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
             {t('impact.dashboardTitle')}
@@ -303,7 +320,8 @@ export const ImpactPage: React.FC = () => {
           </div>
         </section>
       </div>
-    </div>
+      </div>
+    </>
   );
 };
 

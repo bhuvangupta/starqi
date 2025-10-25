@@ -4,6 +4,8 @@ import ReactMarkdown from 'react-markdown';
 import rehypeRaw from 'rehype-raw';
 import remarkGfm from 'remark-gfm';
 import { apiService } from '../services/api';
+import { SEO } from '../components/SEO';
+import { StructuredData, createBreadcrumbSchema } from '../components/StructuredData';
 
 interface Article {
   id: string;
@@ -99,9 +101,51 @@ export const ArticleDetailPage = () => {
     );
   }
 
+  const breadcrumbs = createBreadcrumbSchema([
+    { name: 'Home', url: '/' },
+    { name: 'Blog', url: '/blog' },
+    { name: article.title, url: `/blog/${article.slug}` },
+  ]);
+
+  const articleSchema = {
+    type: 'BlogPosting' as const,
+    headline: article.title,
+    description: article.excerpt || article.title,
+    image: article.featured_image || 'https://skyqi.in/og-image.jpg',
+    datePublished: article.published_at,
+    dateModified: article.published_at,
+    author: {
+      type: 'Person',
+      name: article.author_name,
+    },
+    publisher: {
+      type: 'Organization',
+      name: 'SkyQI',
+      logo: {
+        type: 'ImageObject',
+        url: 'https://skyqi.in/logo.png',
+      },
+    },
+  };
+
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* Back Navigation */}
+    <>
+      <SEO
+        title={article.title}
+        description={article.excerpt || article.title}
+        keywords={`${article.category}, light pollution, ${getCategoryLabel(article.category)}, SkyQI`}
+        url={`/blog/${article.slug}`}
+        image={article.featured_image}
+        type="article"
+        author={article.author_name}
+        publishedTime={article.published_at}
+        modifiedTime={article.published_at}
+        locale={article.language}
+      />
+      <StructuredData data={[breadcrumbs, articleSchema]} />
+
+      <div className="min-h-screen bg-gray-50">
+        {/* Back Navigation */}
       <div className="bg-white border-b">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
           <Link
@@ -236,6 +280,7 @@ export const ArticleDetailPage = () => {
           </Link>
         </div>
       </div>
-    </div>
+      </div>
+    </>
   );
 };

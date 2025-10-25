@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { apiService } from '../services/api';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import { SEO } from '../components/SEO';
+import { StructuredData, createOrganizationSchema, createBreadcrumbSchema } from '../components/StructuredData';
 
 interface QuickStats {
   totalUsers: number;
@@ -10,7 +12,7 @@ interface QuickStats {
 }
 
 export const AboutPage: React.FC = () => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const [stats, setStats] = useState<QuickStats | null>(null);
   const [loading, setLoading] = useState(true);
 
@@ -28,9 +30,57 @@ export const AboutPage: React.FC = () => {
     loadStats();
   }, []);
 
+  const breadcrumbs = createBreadcrumbSchema([
+    { name: 'Home', url: '/' },
+    { name: 'About', url: '/about' },
+  ]);
+
+  const howToSchema = {
+    type: 'HowTo' as const,
+    name: t('about.howSkyQIWorks'),
+    description: t('about.heroSubtitle'),
+    step: [
+      {
+        type: 'HowToStep',
+        name: t('about.step1Title'),
+        text: t('about.step1Desc'),
+      },
+      {
+        type: 'HowToStep',
+        name: t('about.step2Title'),
+        text: t('about.step2Desc'),
+      },
+      {
+        type: 'HowToStep',
+        name: t('about.step3Title'),
+        text: t('about.step3Desc'),
+      },
+      {
+        type: 'HowToStep',
+        name: t('about.step4Title'),
+        text: t('about.step4Desc'),
+      },
+      {
+        type: 'HowToStep',
+        name: t('about.step5Title'),
+        text: t('about.step5Desc'),
+      },
+    ],
+  };
+
   return (
-    <div className="min-h-screen bg-gradient-to-b from-indigo-50 to-white">
-      <div className="max-w-5xl mx-auto px-4 py-12">
+    <>
+      <SEO
+        title={t('about.heroTitle1') + ' ' + t('about.heroTitle2')}
+        description={t('about.heroSubtitle')}
+        keywords="SkyQI, light pollution measurement, citizen science, environmental education, dark sky advocacy, Gurgaon, India, student project"
+        url="/about"
+        locale={i18n.language}
+      />
+      <StructuredData data={[createOrganizationSchema(), breadcrumbs, howToSchema]} />
+
+      <div className="min-h-screen bg-gradient-to-b from-indigo-50 to-white">
+        <div className="max-w-5xl mx-auto px-4 py-12">
         {/* Hero Section */}
         <section className="text-center mb-16">
           <div className="mb-8">
@@ -267,6 +317,7 @@ export const AboutPage: React.FC = () => {
           </p>
         </section>
       </div>
-    </div>
+      </div>
+    </>
   );
 };
