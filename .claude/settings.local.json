@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "allow": [
+      "WebFetch(domain:aqi.in)",
+      "WebSearch"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}
