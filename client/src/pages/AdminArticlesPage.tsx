@@ -40,6 +40,9 @@ export const AdminArticlesPage = () => {
   const [showForm, setShowForm] = useState(false);
   const [editingArticle, setEditingArticle] = useState<Article | null>(null);
   const [showPreview, setShowPreview] = useState(false);
+  const [imageFile, setImageFile] = useState<File | null>(null);
+  const [imagePreview, setImagePreview] = useState<string>('');
+  const [uploadingImage, setUploadingImage] = useState(false);
   const [formData, setFormData] = useState<ArticleFormData>({
     title: '',
     slug: '',
@@ -88,15 +91,73 @@ export const AdminArticlesPage = () => {
     }
   };
 
+  const handleImageSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      if (!file.type.startsWith('image/')) {
+        alert('Please select an image file');
+        return;
+      }
+      if (file.size > 5 * 1024 * 1024) {
+        alert('Image size should be less than 5MB');
+        return;
+      }
+      setImageFile(file);
+      // Create preview
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setImagePreview(reader.result as string);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const uploadImage = async (): Promise<string | null> => {
+    if (!imageFile) return null;
+
+    try {
+      setUploadingImage(true);
+      const formData = new FormData();
+      formData.append('photo', imageFile);
+      formData.append('latitude', '0');
+      formData.append('longitude', '0');
+      formData.append('location_name', 'Article Image');
+
+      const response = await apiService.uploadPhoto(formData);
+
+      // Extract the photo URL from the response
+      if (response.reading?.photo_url) {
+        return response.reading.photo_url;
+      }
+      return null;
+    } catch (error) {
+      console.error('Error uploading image:', error);
+      alert('Failed to upload image');
+      return null;
+    } finally {
+      setUploadingImage(false);
+    }
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     try {
+      let finalFormData = { ...formData };
+
+      // Upload image if a file is selected
+      if (imageFile) {
+        const uploadedImageUrl = await uploadImage();
+        if (uploadedImageUrl) {
+          finalFormData.featured_image = uploadedImageUrl;
+        }
+      }
+
       if (editingArticle) {
-        await apiService.updateArticle(editingArticle.id, formData);
+        await apiService.updateArticle(editingArticle.id, finalFormData);
         alert('Article updated successfully!');
       } else {
-        await apiService.createArticle(formData);
+        await apiService.createArticle(finalFormData);
         alert('Article created successfully!');
       }
       resetForm();
@@ -154,6 +215,8 @@ export const AdminArticlesPage = () => {
       tags: '',
       status: 'draft',
     });
+    setImageFile(null);
+    setImagePreview('');
     setShowForm(false);
     setShowPreview(false);
   };
@@ -356,18 +419,68 @@ export const AdminArticlesPage = () => {
                     />
                   </div>
 
-                  {/* Featured Image URL */}
+                  {/* Hero/Featured Image */}
                   <div className="md:col-span-2">
                     <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Featured Image URL
+                      Hero Image (Optional)
                     </label>
-                    <input
-                      type="url"
-                      name="featured_image"
-                      value={formData.featured_image}
-                      onChange={handleInputChange}
-                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
-                    />
+
+                    {/* Image Preview */}
+                    {(imagePreview || formData.featured_image) && (
+                      <div className="mb-4 relative">
+                        <img
+                          src={imagePreview || formData.featured_image}
+                          alt="Preview"
+                          className="w-full h-64 object-cover rounded-lg border border-gray-300"
+                        />
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setImageFile(null);
+                            setImagePreview('');
+                            setFormData((prev) => ({ ...prev, featured_image: '' }));
+                          }}
+                          className="absolute top-2 right-2 px-3 py-1 bg-red-600 text-white text-sm rounded-lg hover:bg-red-700"
+                        >
+                          Remove
+                        </button>
+                      </div>
+                    )}
+
+                    {/* Upload or URL Options */}
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      {/* File Upload */}
+                      <div>
+                        <label className="block text-sm text-gray-600 mb-2">Upload Image</label>
+                        <input
+                          type="file"
+                          accept="image/*"
+                          onChange={handleImageSelect}
+                          className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100"
+                        />
+                        <p className="text-xs text-gray-500 mt-1">Max 5MB, JPG/PNG</p>
+                      </div>
+
+                      {/* OR Divider */}
+                      <div className="flex items-center justify-center text-gray-500 text-sm font-medium md:col-span-2">
+                        <div className="flex-1 border-t border-gray-300"></div>
+                        <span className="px-3">OR</span>
+                        <div className="flex-1 border-t border-gray-300"></div>
+                      </div>
+
+                      {/* URL Input */}
+                      <div className="md:col-span-2">
+                        <label className="block text-sm text-gray-600 mb-2">Image URL</label>
+                        <input
+                          type="url"
+                          name="featured_image"
+                          value={formData.featured_image}
+                          onChange={handleInputChange}
+                          placeholder="https://example.com/image.jpg"
+                          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+                        />
+                      </div>
+                    </div>
                   </div>
 
                   {/* Tags */}
@@ -390,9 +503,17 @@ export const AdminArticlesPage = () => {
                 <div className="flex justify-end">
                   <button
                     type="submit"
-                    className="px-8 py-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors font-medium"
+                    disabled={uploadingImage}
+                    className="px-8 py-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors font-medium disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
                   >
-                    {editingArticle ? 'Update Article' : 'Create Article'}
+                    {uploadingImage && (
+                      <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
+                    )}
+                    {uploadingImage
+                      ? 'Uploading Image...'
+                      : editingArticle
+                      ? 'Update Article'
+                      : 'Create Article'}
                   </button>
                 </div>
               </form>
