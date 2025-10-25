@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { MapContainer, TileLayer, CircleMarker, Popup, useMap } from 'react-leaflet';
 import { apiService } from '../services/api';
 import { MapReading, LightPollutionLevel } from '../types';
@@ -15,26 +16,16 @@ const getMarkerColor = (level: LightPollutionLevel): string => {
   return colors[level] || '#6b7280';
 };
 
-const getBortleDescription = (bortle?: number): string => {
-  if (!bortle) return 'Unknown';
-  const descriptions: Record<number, string> = {
-    1: 'Excellent dark-sky site',
-    2: 'Typical truly dark site',
-    3: 'Rural sky',
-    4: 'Rural/suburban transition',
-    5: 'Suburban sky',
-    6: 'Bright suburban sky',
-    7: 'Suburban/urban transition',
-    8: 'City sky',
-    9: 'Inner-city sky',
-  };
-  return descriptions[bortle] || 'Unknown';
-};
-
 export const LightPollutionMap: React.FC = () => {
+  const { t } = useTranslation();
   const [readings, setReadings] = useState<MapReading[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+
+  const getBortleDescription = (bortle?: number): string => {
+    if (!bortle) return t('map.unknownLocation');
+    return t(`map.bortleDescriptions.${bortle}`, t('map.unknownLocation'));
+  };
 
   useEffect(() => {
     loadMapData();
@@ -57,7 +48,7 @@ export const LightPollutionMap: React.FC = () => {
       <div className="flex items-center justify-center h-96">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
-          <p className="mt-4 text-gray-600">Loading map data...</p>
+          <p className="mt-4 text-gray-600">{t('map.loadingMap')}</p>
         </div>
       </div>
     );
@@ -75,14 +66,14 @@ export const LightPollutionMap: React.FC = () => {
     <div className="space-y-4">
       {/* Legend */}
       <div className="bg-white rounded-lg shadow p-4">
-        <h3 className="text-sm font-semibold text-gray-700 mb-2">Light Pollution Level</h3>
+        <h3 className="text-sm font-semibold text-gray-700 mb-2">{t('map.lightPollutionLevel')}</h3>
         <div className="flex flex-wrap gap-3">
           {Object.entries({
-            [LightPollutionLevel.EXCELLENT]: 'Excellent',
-            [LightPollutionLevel.GOOD]: 'Good',
-            [LightPollutionLevel.MODERATE]: 'Moderate',
-            [LightPollutionLevel.POOR]: 'Poor',
-            [LightPollutionLevel.VERY_POOR]: 'Very Poor',
+            [LightPollutionLevel.EXCELLENT]: t('map.excellent'),
+            [LightPollutionLevel.GOOD]: t('map.good'),
+            [LightPollutionLevel.MODERATE]: t('map.moderate'),
+            [LightPollutionLevel.POOR]: t('map.poor'),
+            [LightPollutionLevel.VERY_POOR]: t('map.veryPoor'),
           }).map(([level, label]) => (
             <div key={level} className="flex items-center gap-2">
               <div
@@ -122,7 +113,7 @@ export const LightPollutionMap: React.FC = () => {
               <Popup>
                 <div className="p-2">
                   <h4 className="font-bold text-gray-800 mb-2">
-                    {reading.location_name || reading.city || 'Unknown Location'}
+                    {reading.location_name || reading.city || t('map.unknownLocation')}
                   </h4>
                   {reading.city && reading.country && (
                     <p className="text-sm text-gray-600 mb-2">
@@ -131,7 +122,7 @@ export const LightPollutionMap: React.FC = () => {
                   )}
                   <div className="space-y-1">
                     <p className="text-sm">
-                      <span className="font-semibold">Level:</span>{' '}
+                      <span className="font-semibold">{t('map.level')}:</span>{' '}
                       <span
                         className="capitalize"
                         style={{ color: getMarkerColor(reading.light_pollution_level) }}
@@ -141,7 +132,7 @@ export const LightPollutionMap: React.FC = () => {
                     </p>
                     {reading.bortle_scale && (
                       <p className="text-sm">
-                        <span className="font-semibold">Bortle:</span> Class{' '}
+                        <span className="font-semibold">{t('map.bortle')}:</span> {t('map.class')}{' '}
                         {reading.bortle_scale}
                       </p>
                     )}
@@ -167,8 +158,7 @@ export const LightPollutionMap: React.FC = () => {
       {/* Stats */}
       <div className="bg-white rounded-lg shadow p-4">
         <p className="text-sm text-gray-600">
-          Showing <span className="font-semibold">{readings.length}</span> sky quality readings from
-          around the world
+          {t('map.showingReadings')} <span className="font-semibold">{readings.length}</span> {t('map.readingsFromWorld')}
         </p>
       </div>
     </div>

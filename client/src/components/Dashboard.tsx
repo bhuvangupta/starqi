@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { apiService } from '../services/api';
 import { Statistics, LightPollutionLevel } from '../types';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 
 export const Dashboard: React.FC = () => {
+  const { t } = useTranslation();
   const [stats, setStats] = useState<Statistics | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -29,7 +31,7 @@ export const Dashboard: React.FC = () => {
       <div className="flex items-center justify-center h-96">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
-          <p className="mt-4 text-gray-600">Loading statistics...</p>
+          <p className="mt-4 text-gray-600">{t('dashboard.loadingStatistics')}</p>
         </div>
       </div>
     );
@@ -38,7 +40,7 @@ export const Dashboard: React.FC = () => {
   if (error || !stats) {
     return (
       <div className="bg-red-50 border border-red-200 rounded-lg p-4 text-red-700">
-        {error || 'No data available'}
+        {error || t('dashboard.noDataAvailable')}
       </div>
     );
   }
@@ -49,26 +51,26 @@ export const Dashboard: React.FC = () => {
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         <div className="bg-gradient-to-br from-blue-500 to-blue-600 rounded-lg shadow-lg p-6 text-white">
           <h3 className="text-sm font-semibold uppercase tracking-wide opacity-90">
-            Total Readings
+            {t('dashboard.totalReadings')}
           </h3>
           <p className="text-4xl font-bold mt-2">{stats.total_readings.toLocaleString()}</p>
-          <p className="text-sm opacity-75 mt-2">Global sky quality measurements</p>
+          <p className="text-sm opacity-75 mt-2">{t('dashboard.globalMeasurements')}</p>
         </div>
 
         <div className="bg-gradient-to-br from-purple-500 to-purple-600 rounded-lg shadow-lg p-6 text-white">
           <h3 className="text-sm font-semibold uppercase tracking-wide opacity-90">
-            Average Bortle
+            {t('dashboard.averageBortle')}
           </h3>
           <p className="text-4xl font-bold mt-2">{stats.average_bortle}</p>
-          <p className="text-sm opacity-75 mt-2">Worldwide average dark-sky scale</p>
+          <p className="text-sm opacity-75 mt-2">{t('dashboard.worldwideAverage')}</p>
         </div>
 
         <div className="bg-gradient-to-br from-green-500 to-green-600 rounded-lg shadow-lg p-6 text-white">
           <h3 className="text-sm font-semibold uppercase tracking-wide opacity-90">
-            Average SQM
+            {t('dashboard.averageSQM')}
           </h3>
           <p className="text-4xl font-bold mt-2">{stats.average_sqm}</p>
-          <p className="text-sm opacity-75 mt-2">mag/arcsec² (higher is darker)</p>
+          <p className="text-sm opacity-75 mt-2">{t('dashboard.sqmDescription')}</p>
         </div>
       </div>
 
@@ -78,28 +80,28 @@ export const Dashboard: React.FC = () => {
           <div className="bg-white rounded-lg shadow p-6">
             <h3 className="text-lg font-bold text-gray-800 mb-4 flex items-center gap-2">
               <span className="text-2xl">🌟</span>
-              Best Sky Quality
+              {t('dashboard.bestSkyQuality')}
             </h3>
             <div className="space-y-2">
               <p className="text-sm text-gray-600">
-                <span className="font-semibold">Location:</span>{' '}
+                <span className="font-semibold">{t('dashboard.location')}:</span>{' '}
                 {stats.best_reading.location_name ||
                   `${stats.best_reading.city}, ${stats.best_reading.country}` ||
-                  'Unknown'}
+                  t('map.unknownLocation')}
               </p>
               <p className="text-sm text-gray-600">
-                <span className="font-semibold">SQM Value:</span>{' '}
+                <span className="font-semibold">{t('dashboard.sqmValue')}:</span>{' '}
                 <span className="text-green-600 font-bold">
                   {stats.best_reading.sqm_value?.toFixed(2)}
                 </span>{' '}
                 mag/arcsec²
               </p>
               <p className="text-sm text-gray-600">
-                <span className="font-semibold">Bortle Scale:</span> Class{' '}
+                <span className="font-semibold">{t('dashboard.bortleScale')}:</span> {t('map.class')}{' '}
                 {stats.best_reading.bortle_scale}
               </p>
               <p className="text-sm text-gray-600">
-                <span className="font-semibold">Stars Detected:</span>{' '}
+                <span className="font-semibold">{t('dashboard.starsDetected')}:</span>{' '}
                 {stats.best_reading.star_count}
               </p>
             </div>
@@ -110,28 +112,28 @@ export const Dashboard: React.FC = () => {
           <div className="bg-white rounded-lg shadow p-6">
             <h3 className="text-lg font-bold text-gray-800 mb-4 flex items-center gap-2">
               <span className="text-2xl">💡</span>
-              Highest Light Pollution
+              {t('dashboard.highestLightPollution')}
             </h3>
             <div className="space-y-2">
               <p className="text-sm text-gray-600">
-                <span className="font-semibold">Location:</span>{' '}
+                <span className="font-semibold">{t('dashboard.location')}:</span>{' '}
                 {stats.worst_reading.location_name ||
                   `${stats.worst_reading.city}, ${stats.worst_reading.country}` ||
-                  'Unknown'}
+                  t('map.unknownLocation')}
               </p>
               <p className="text-sm text-gray-600">
-                <span className="font-semibold">SQM Value:</span>{' '}
+                <span className="font-semibold">{t('dashboard.sqmValue')}:</span>{' '}
                 <span className="text-red-600 font-bold">
                   {stats.worst_reading.sqm_value?.toFixed(2)}
                 </span>{' '}
                 mag/arcsec²
               </p>
               <p className="text-sm text-gray-600">
-                <span className="font-semibold">Bortle Scale:</span> Class{' '}
+                <span className="font-semibold">{t('dashboard.bortleScale')}:</span> {t('map.class')}{' '}
                 {stats.worst_reading.bortle_scale}
               </p>
               <p className="text-sm text-gray-600">
-                <span className="font-semibold">Stars Detected:</span>{' '}
+                <span className="font-semibold">{t('dashboard.starsDetected')}:</span>{' '}
                 {stats.worst_reading.star_count || 0}
               </p>
             </div>
@@ -143,7 +145,7 @@ export const Dashboard: React.FC = () => {
       {stats.top_countries && stats.top_countries.length > 0 && (
         <div className="bg-white rounded-lg shadow p-6">
           <h3 className="text-lg font-bold text-gray-800 mb-4">
-            Top Countries by Readings
+            {t('dashboard.topCountries')}
           </h3>
           <ResponsiveContainer width="100%" height={300}>
             <BarChart data={stats.top_countries}>
@@ -152,7 +154,7 @@ export const Dashboard: React.FC = () => {
               <YAxis />
               <Tooltip />
               <Legend />
-              <Bar dataKey="count" fill="#3b82f6" name="Number of Readings" />
+              <Bar dataKey="count" fill="#3b82f6" name={t('dashboard.numberOfReadings')} />
             </BarChart>
           </ResponsiveContainer>
         </div>
@@ -161,28 +163,23 @@ export const Dashboard: React.FC = () => {
       {/* Info Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         <div className="bg-white rounded-lg shadow p-6">
-          <h4 className="font-bold text-gray-800 mb-2">What is Light Pollution?</h4>
+          <h4 className="font-bold text-gray-800 mb-2">{t('dashboard.whatIsLightPollution')}</h4>
           <p className="text-sm text-gray-600">
-            Light pollution is excessive or misdirected artificial light that brightens the night
-            sky, obscuring stars and affecting ecosystems, human health, and astronomical
-            observations.
+            {t('dashboard.lightPollutionDesc')}
           </p>
         </div>
 
         <div className="bg-white rounded-lg shadow p-6">
-          <h4 className="font-bold text-gray-800 mb-2">Bortle Scale Explained</h4>
+          <h4 className="font-bold text-gray-800 mb-2">{t('dashboard.bortleScaleExplained')}</h4>
           <p className="text-sm text-gray-600">
-            The Bortle Dark-Sky Scale measures night sky brightness from Class 1 (excellent
-            dark-sky site) to Class 9 (inner-city sky). Lower numbers indicate darker, better
-            quality skies.
+            {t('dashboard.bortleScaleDesc')}
           </p>
         </div>
 
         <div className="bg-white rounded-lg shadow p-6">
-          <h4 className="font-bold text-gray-800 mb-2">Sky Quality Meter (SQM)</h4>
+          <h4 className="font-bold text-gray-800 mb-2">{t('dashboard.sqmMeterExplained')}</h4>
           <p className="text-sm text-gray-600">
-            SQM measures sky brightness in magnitudes per square arcsecond. Higher values (21-22)
-            indicate darker skies, while lower values (15-17) indicate significant light pollution.
+            {t('dashboard.sqmMeterDesc')}
           </p>
         </div>
       </div>

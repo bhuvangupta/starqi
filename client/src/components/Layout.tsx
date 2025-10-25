@@ -17,8 +17,8 @@ export const Layout: React.FC = () => {
             <Link to="/" className="flex items-center gap-2">
               <span className="text-3xl">🌌</span>
               <div>
-                <h1 className="text-2xl font-bold">StarQI</h1>
-                <p className="text-sm text-dark-sky-300">Light Pollution Portal</p>
+                <h1 className="text-2xl font-bold">SkyQI</h1>
+                <p className="text-sm text-dark-sky-300">{t('layout.subtitle')}</p>
               </div>
             </Link>
 
@@ -95,7 +95,7 @@ export const Layout: React.FC = () => {
         <div className="container mx-auto px-4 py-8">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             <div>
-              <h3 className="text-lg font-bold mb-4">{t('footer.aboutStarQI')}</h3>
+              <h3 className="text-lg font-bold mb-4">{t('footer.aboutSkyQI')}</h3>
               <p className="text-dark-sky-300 text-sm mb-3">
                 {t('footer.aboutDescription')}
               </p>

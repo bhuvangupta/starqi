@@ -87,7 +87,7 @@ export const AboutPage: React.FC = () => {
 
         {/* Story Section */}
         <section className="prose prose-lg max-w-none mb-16">
-          <h2 className="text-3xl font-bold mb-6 text-gray-800">{t('about.theStoryBehindStarQI')}</h2>
+          <h2 className="text-3xl font-bold mb-6 text-gray-800">{t('about.theStoryBehindSkyQI')}</h2>
 
           <div className="bg-amber-50 border-l-4 border-amber-500 p-6 rounded-r-lg mb-8">
             <p className="text-lg italic text-gray-700 mb-0">
@@ -129,7 +129,7 @@ export const AboutPage: React.FC = () => {
             {t('about.frustrationPara2')}
           </p>
 
-          <h3 className="text-2xl font-bold mt-8 mb-4 text-gray-800">{t('about.howStarQIWorks')}</h3>
+          <h3 className="text-2xl font-bold mt-8 mb-4 text-gray-800">{t('about.howSkyQIWorks')}</h3>
           <div className="bg-indigo-50 p-6 rounded-lg">
             <ol className="text-gray-700 space-y-3 mb-0">
               <li className="flex items-start">
@@ -212,7 +212,7 @@ export const AboutPage: React.FC = () => {
                 {t('about.forSchoolsDesc')}
               </p>
               <a
-                href="mailto:contact@starqi.org"
+                href="mailto:contact@skyqi.org"
                 className="inline-block bg-white text-indigo-600 px-6 py-2 rounded-lg hover:bg-indigo-50 transition-colors font-semibold"
               >
                 {t('about.getInTouch')}
@@ -238,7 +238,7 @@ export const AboutPage: React.FC = () => {
             </p>
             <div className="flex justify-center space-x-4">
               <a
-                href="https://github.com/yourusername/starqi"
+                href="https://github.com/yourusername/skyqi"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-indigo-600 hover:text-indigo-800 font-semibold"
@@ -247,7 +247,7 @@ export const AboutPage: React.FC = () => {
               </a>
               <span className="text-gray-300">|</span>
               <a
-                href="mailto:contact@starqi.org"
+                href="mailto:contact@skyqi.org"
                 className="text-indigo-600 hover:text-indigo-800 font-semibold"
               >
                 {t('about.contact')}
