@@ -27,6 +27,18 @@ export const Layout: React.FC = () => {
                 Home
               </Link>
               <Link
+                to="/about"
+                className="text-white hover:text-dark-sky-200 transition-colors"
+              >
+                About
+              </Link>
+              <Link
+                to="/impact"
+                className="text-white hover:text-dark-sky-200 transition-colors"
+              >
+                Impact
+              </Link>
+              <Link
                 to="/upload"
                 className="text-white hover:text-dark-sky-200 transition-colors"
               >
@@ -74,10 +86,22 @@ export const Layout: React.FC = () => {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             <div>
               <h3 className="text-lg font-bold mb-4">About StarQI</h3>
-              <p className="text-dark-sky-300 text-sm">
+              <p className="text-dark-sky-300 text-sm mb-3">
                 A global platform for measuring and tracking light pollution through citizen
                 science and sky quality monitoring.
               </p>
+              <ul className="space-y-2 text-sm text-dark-sky-300">
+                <li>
+                  <Link to="/about" className="hover:text-white">
+                    Our Story
+                  </Link>
+                </li>
+                <li>
+                  <Link to="/impact" className="hover:text-white">
+                    Impact Dashboard
+                  </Link>
+                </li>
+              </ul>
             </div>
             <div>
               <h3 className="text-lg font-bold mb-4">Resources</h3>

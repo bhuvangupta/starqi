@@ -11,6 +11,7 @@ import { initializeDatabase } from './config/database';
 // Import routes
 import authRoutes from './routes/authRoutes';
 import readingsRoutes from './routes/readingsRoutes';
+import statsRoutes from './routes/statsRoutes';
 
 // Load environment variables
 dotenv.config();
@@ -20,7 +21,12 @@ const PORT = process.env.PORT || 5000;
 
 // Middleware
 app.use(helmet()); // Security headers
-app.use(cors({ origin: process.env.CORS_ORIGIN || '*' })); // CORS
+
+// CORS - handle multiple origins
+const corsOrigins = process.env.CORS_ORIGIN
+  ? process.env.CORS_ORIGIN.split(',').map(origin => origin.trim())
+  : '*';
+app.use(cors({ origin: corsOrigins })); // CORS
 app.use(compression()); // Compress responses
 app.use(morgan('dev')); // Logging
 app.use(express.json()); // Parse JSON bodies
@@ -33,6 +39,7 @@ app.use('/uploads', express.static(path.resolve(uploadDir)));
 // API Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/readings', readingsRoutes);
+app.use('/api/stats', statsRoutes);
 
 // Health check
 app.get('/health', (req: Request, res: Response) => {
@@ -52,6 +59,7 @@ app.get('/', (req: Request, res: Response) => {
       health: '/health',
       auth: '/api/auth',
       readings: '/api/readings',
+      stats: '/api/stats',
     },
   });
 });

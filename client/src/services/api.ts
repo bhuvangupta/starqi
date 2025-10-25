@@ -8,7 +8,7 @@ import {
   MapReading,
 } from '../types';
 
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001/api';
 
 class ApiService {
   private api: AxiosInstance;
@@ -94,6 +94,33 @@ class ApiService {
     const response = await this.api.get<{ statistics: Statistics }>(
       '/readings/stats/global'
     );
+    return response.data;
+  }
+
+  // Stats endpoints
+  async getImpactMetrics(): Promise<any> {
+    const response = await this.api.get('/stats/impact');
+    return response.data;
+  }
+
+  async getQuickStats(): Promise<{
+    totalUsers: number;
+    totalReadings: number;
+    countries: number;
+  }> {
+    const response = await this.api.get('/stats/quick');
+    return response.data;
+  }
+
+  async updateManualMetric(
+    metricName: string,
+    value: number,
+    updatedBy?: string
+  ): Promise<any> {
+    const response = await this.api.put(`/stats/manual/${metricName}`, {
+      value,
+      updatedBy,
+    });
     return response.data;
   }
 }

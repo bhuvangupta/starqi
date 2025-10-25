@@ -4,6 +4,8 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { Layout } from './components/Layout';
 import { HomePage } from './pages/HomePage';
 import { UploadPage } from './pages/UploadPage';
+import { AboutPage } from './pages/AboutPage';
+import { ImpactPage } from './pages/ImpactPage';
 import { useAuthStore } from './stores/authStore';
 
 const queryClient = new QueryClient({
@@ -29,6 +31,8 @@ function App() {
           <Route path="/" element={<Layout />}>
             <Route index element={<HomePage />} />
             <Route path="upload" element={<UploadPage />} />
+            <Route path="about" element={<AboutPage />} />
+            <Route path="impact" element={<ImpactPage />} />
           </Route>
         </Routes>
       </BrowserRouter>
