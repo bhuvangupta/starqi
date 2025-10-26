@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { Dashboard } from '../components/Dashboard';
 import { LightPollutionMap } from '../components/LightPollutionMap';
+import { IndiaMapPreview } from '../components/IndiaMapPreview';
 import { SEO } from '../components/SEO';
 import { StructuredData, createOrganizationSchema, createWebsiteSchema } from '../components/StructuredData';
 
@@ -44,41 +45,49 @@ export const HomePage: React.FC = () => {
             <div className="absolute top-1/2 left-1/2 w-36 h-36 bg-blue-300 rounded-full blur-3xl animate-pulse delay-150"></div>
           </div>
 
-          <div className="relative z-10">
-            <div className="inline-block mb-4 px-4 py-2 bg-white/20 backdrop-blur-md rounded-full text-sm font-medium">
-              ✨ Citizen Science for Dark Skies
+          <div className="relative z-10 grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
+            {/* Left: Content */}
+            <div>
+              <div className="inline-block mb-4 px-4 py-2 bg-white/20 backdrop-blur-md rounded-full text-sm font-medium">
+                ✨ Citizen Science for Dark Skies
+              </div>
+
+              <h1 className="text-5xl md:text-7xl font-black mb-6 leading-tight bg-clip-text text-transparent bg-gradient-to-r from-white to-purple-100">
+                Track Light Pollution.<br />
+                Save Our Stars. 🌟
+              </h1>
+
+              <p className="text-xl md:text-2xl text-purple-100 mb-4">
+                {t('home.heroSubtitle')}
+              </p>
+
+              <p className="text-lg text-purple-200 mb-8">
+                Upload a night sky photo 📸, get instant sky quality analysis 🔬, and join thousands fighting light pollution worldwide 🌍
+              </p>
+
+              <div className="flex flex-col sm:flex-row gap-4">
+                <Link
+                  to="/upload"
+                  className="group px-8 py-4 bg-white text-purple-600 font-bold rounded-2xl hover:bg-purple-50 transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105 text-center"
+                >
+                  <span className="inline-flex items-center gap-2">
+                    📸 {t('home.uploadSkyPhoto')}
+                    <span className="group-hover:translate-x-1 transition-transform">→</span>
+                  </span>
+                </Link>
+
+                <a
+                  href="#map"
+                  className="px-8 py-4 bg-purple-800/40 backdrop-blur-md text-white font-bold rounded-2xl hover:bg-purple-800/60 transition-all duration-300 border-2 border-white/30 hover:border-white/50 text-center"
+                >
+                  🗺️ {t('home.exploreMap')}
+                </a>
+              </div>
             </div>
 
-            <h1 className="text-5xl md:text-7xl font-black mb-6 leading-tight bg-clip-text text-transparent bg-gradient-to-r from-white to-purple-100">
-              Track Light Pollution.<br />
-              Save Our Stars. 🌟
-            </h1>
-
-            <p className="text-xl md:text-2xl text-purple-100 mb-4 max-w-3xl">
-              {t('home.heroSubtitle')}
-            </p>
-
-            <p className="text-lg text-purple-200 mb-8 max-w-2xl">
-              Upload a night sky photo 📸, get instant sky quality analysis 🔬, and join thousands fighting light pollution worldwide 🌍
-            </p>
-
-            <div className="flex flex-col sm:flex-row gap-4">
-              <Link
-                to="/upload"
-                className="group px-8 py-4 bg-white text-purple-600 font-bold rounded-2xl hover:bg-purple-50 transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105 text-center"
-              >
-                <span className="inline-flex items-center gap-2">
-                  📸 {t('home.uploadSkyPhoto')}
-                  <span className="group-hover:translate-x-1 transition-transform">→</span>
-                </span>
-              </Link>
-
-              <a
-                href="#map"
-                className="px-8 py-4 bg-purple-800/40 backdrop-blur-md text-white font-bold rounded-2xl hover:bg-purple-800/60 transition-all duration-300 border-2 border-white/30 hover:border-white/50 text-center"
-              >
-                🗺️ {t('home.exploreMap')}
-              </a>
+            {/* Right: India Map Preview */}
+            <div className="hidden lg:block h-[400px] w-full">
+              <IndiaMapPreview />
             </div>
           </div>
         </div>

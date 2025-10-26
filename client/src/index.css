@@ -46,3 +46,18 @@ body {
     animation-delay: 150ms;
   }
 }
+
+/* Map Marker Enhancements */
+.marker-pulse {
+  filter: drop-shadow(0 0 8px rgba(0, 0, 0, 0.4));
+  animation: marker-glow 2s ease-in-out infinite;
+}
+
+@keyframes marker-glow {
+  0%, 100% {
+    filter: drop-shadow(0 0 8px rgba(0, 0, 0, 0.4));
+  }
+  50% {
+    filter: drop-shadow(0 0 12px rgba(0, 0, 0, 0.6));
+  }
+}
