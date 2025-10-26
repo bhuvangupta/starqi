@@ -46,6 +46,9 @@ export const PhotoGalleryPage: React.FC = () => {
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [selectedPhoto, setSelectedPhoto] = useState<PhotoData | null>(null);
+  const [currentPhotoIndex, setCurrentPhotoIndex] = useState<number>(0);
+  const [touchStart, setTouchStart] = useState<number | null>(null);
+  const [touchEnd, setTouchEnd] = useState<number | null>(null);
 
   // Helper function to get full image URL
   const getImageUrl = (photoUrl: string) => {
@@ -97,6 +100,68 @@ export const PhotoGalleryPage: React.FC = () => {
     return photo.reading.country || 'Unknown Location';
   };
 
+  // Navigation functions
+  const goToNextPhoto = () => {
+    if (currentPhotoIndex < photos.length - 1) {
+      const newIndex = currentPhotoIndex + 1;
+      setCurrentPhotoIndex(newIndex);
+      setSelectedPhoto(photos[newIndex]);
+    }
+  };
+
+  const goToPreviousPhoto = () => {
+    if (currentPhotoIndex > 0) {
+      const newIndex = currentPhotoIndex - 1;
+      setCurrentPhotoIndex(newIndex);
+      setSelectedPhoto(photos[newIndex]);
+    }
+  };
+
+  // Swipe detection
+  const minSwipeDistance = 50;
+
+  const onTouchStart = (e: React.TouchEvent) => {
+    setTouchEnd(null);
+    setTouchStart(e.targetTouches[0].clientX);
+  };
+
+  const onTouchMove = (e: React.TouchEvent) => {
+    setTouchEnd(e.targetTouches[0].clientX);
+  };
+
+  const onTouchEnd = () => {
+    if (!touchStart || !touchEnd) return;
+
+    const distance = touchStart - touchEnd;
+    const isLeftSwipe = distance > minSwipeDistance;
+    const isRightSwipe = distance < -minSwipeDistance;
+
+    if (isLeftSwipe) {
+      goToNextPhoto();
+    }
+    if (isRightSwipe) {
+      goToPreviousPhoto();
+    }
+  };
+
+  // Keyboard navigation
+  useEffect(() => {
+    const handleKeyPress = (e: KeyboardEvent) => {
+      if (!selectedPhoto) return;
+
+      if (e.key === 'ArrowRight') {
+        goToNextPhoto();
+      } else if (e.key === 'ArrowLeft') {
+        goToPreviousPhoto();
+      } else if (e.key === 'Escape') {
+        setSelectedPhoto(null);
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyPress);
+    return () => window.removeEventListener('keydown', handleKeyPress);
+  }, [selectedPhoto, currentPhotoIndex, photos]);
+
   if (loading && photos.length === 0) {
     return (
       <div className="max-w-7xl mx-auto p-6">
@@ -136,11 +201,14 @@ export const PhotoGalleryPage: React.FC = () => {
         {photos.length > 0 ? (
           <>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-              {photos.map((photo) => (
+              {photos.map((photo, index) => (
                 <div
                   key={photo.id}
                   className="group relative aspect-square bg-gray-900 rounded-xl overflow-hidden cursor-pointer shadow-lg hover:shadow-2xl transition-all duration-300 hover:scale-105"
-                  onClick={() => setSelectedPhoto(photo)}
+                  onClick={() => {
+                    setSelectedPhoto(photo);
+                    setCurrentPhotoIndex(index);
+                  }}
                 >
                   {/* Photo Image */}
                   <img
@@ -264,10 +332,48 @@ export const PhotoGalleryPage: React.FC = () => {
           className="fixed inset-0 bg-black/90 z-50 flex items-center justify-center p-4"
           onClick={() => setSelectedPhoto(null)}
         >
+          {/* Previous Button */}
+          {currentPhotoIndex > 0 && (
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                goToPreviousPhoto();
+              }}
+              className="absolute left-4 top-1/2 -translate-y-1/2 z-10 bg-white/10 backdrop-blur-md hover:bg-white/20 text-white p-4 rounded-full transition-all duration-200 hover:scale-110"
+            >
+              <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M15 19l-7-7 7-7" />
+              </svg>
+            </button>
+          )}
+
+          {/* Next Button */}
+          {currentPhotoIndex < photos.length - 1 && (
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                goToNextPhoto();
+              }}
+              className="absolute right-4 top-1/2 -translate-y-1/2 z-10 bg-white/10 backdrop-blur-md hover:bg-white/20 text-white p-4 rounded-full transition-all duration-200 hover:scale-110"
+            >
+              <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M9 5l7 7-7 7" />
+              </svg>
+            </button>
+          )}
+
           <div
-            className="bg-white rounded-3xl max-w-5xl w-full max-h-[90vh] overflow-y-auto"
+            className="bg-white rounded-3xl max-w-5xl w-full max-h-[90vh] overflow-y-auto relative"
             onClick={(e) => e.stopPropagation()}
+            onTouchStart={onTouchStart}
+            onTouchMove={onTouchMove}
+            onTouchEnd={onTouchEnd}
           >
+            {/* Photo Counter */}
+            <div className="absolute top-4 left-4 z-10 bg-black/70 backdrop-blur-md text-white px-4 py-2 rounded-full text-sm font-semibold">
+              {currentPhotoIndex + 1} / {photos.length}
+            </div>
+
             <div className="grid grid-cols-1 lg:grid-cols-2">
               {/* Photo */}
               <div className="relative aspect-square lg:aspect-auto bg-gray-900">
@@ -276,6 +382,20 @@ export const PhotoGalleryPage: React.FC = () => {
                   alt={formatLocation(selectedPhoto)}
                   className="w-full h-full object-cover"
                 />
+
+                {/* Navigation Hints */}
+                {photos.length > 1 && (
+                  <>
+                    {/* Swipe Hint - Mobile */}
+                    <div className="absolute bottom-4 left-1/2 -translate-x-1/2 bg-black/50 backdrop-blur-md text-white px-4 py-2 rounded-full text-xs font-medium lg:hidden">
+                      👈 Swipe to navigate 👉
+                    </div>
+                    {/* Keyboard Hint - Desktop */}
+                    <div className="hidden lg:block absolute bottom-4 left-1/2 -translate-x-1/2 bg-black/50 backdrop-blur-md text-white px-4 py-2 rounded-full text-xs font-medium">
+                      ← → Arrow keys to navigate
+                    </div>
+                  </>
+                )}
               </div>
 
               {/* Details */}
