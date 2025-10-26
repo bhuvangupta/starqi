@@ -8,6 +8,7 @@ import {
   OneToOne,
   JoinColumn,
   BeforeInsert,
+  Index,
 } from 'typeorm';
 import { v4 as uuidv4 } from 'uuid';
 import { User } from './User';
@@ -28,11 +29,19 @@ export enum LightPollutionLevel {
 }
 
 @Entity('sky_readings')
+// Composite indexes for common query patterns
+@Index('idx_user_observation', ['user_id', 'observation_datetime']) // User's readings ordered by date
+@Index('idx_country_created', ['country', 'created_at']) // Country stats over time
+@Index('idx_city_country', ['city', 'country']) // Location-based queries
+@Index('idx_observation_datetime', ['observation_datetime']) // Time-based sorting
+@Index('idx_created_at', ['created_at']) // Recent readings
+@Index('idx_user_sqm', ['user_id', 'sqm_value']) // User's best readings
 export class SkyReading {
   @PrimaryColumn('varchar', { length: 36 })
   id: string;
 
   @Column({ type: 'varchar', length: 36, nullable: true })
+  @Index('idx_user_id') // Single column index for user queries
   user_id: string | null;
 
   @Column({
@@ -52,9 +61,11 @@ export class SkyReading {
   location_name: string | null;
 
   @Column({ type: 'varchar', length: 100, nullable: true })
+  @Index('idx_city') // City-based queries and grouping
   city: string | null;
 
   @Column({ type: 'varchar', length: 100, nullable: true })
+  @Index('idx_country') // Country-based queries and grouping
   country: string | null;
 
   // Sky Quality Metrics

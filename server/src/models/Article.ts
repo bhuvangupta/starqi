@@ -1,4 +1,4 @@
-import { Entity, PrimaryColumn, Column, CreateDateColumn, UpdateDateColumn, ManyToOne, JoinColumn } from 'typeorm';
+import { Entity, PrimaryColumn, Column, CreateDateColumn, UpdateDateColumn, ManyToOne, JoinColumn, Index } from 'typeorm';
 import { User } from './User';
 
 export enum ArticleCategory {
@@ -21,6 +21,10 @@ export enum ArticleStatus {
 }
 
 @Entity('articles')
+@Index('idx_status_published', ['status', 'published_at']) // Published articles sorted by date
+@Index('idx_category_status', ['category', 'status']) // Category filtering
+@Index('idx_language_status', ['language', 'status']) // Language filtering
+@Index('idx_created_at', ['created_at']) // Recent articles
 export class Article {
   @PrimaryColumn('varchar', { length: 36 })
   id: string;

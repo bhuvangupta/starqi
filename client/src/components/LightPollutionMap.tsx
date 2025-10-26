@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState, useRef, useMemo, useCallback, memo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { MapContainer, TileLayer, CircleMarker, Popup, useMapEvents, Marker, useMap } from 'react-leaflet';
 import { apiService } from '../services/api';
@@ -135,16 +135,18 @@ export const LightPollutionMap: React.FC = () => {
     return then.toLocaleDateString();
   };
 
-  // Filter readings based on toggle
-  const filteredReadings = showUserReadingsOnly
-    ? readings.filter((reading) => reading.user_id !== null)
-    : readings;
+  // Filter readings based on toggle (memoized for performance)
+  const filteredReadings = useMemo(() => {
+    return showUserReadingsOnly
+      ? readings.filter((reading) => reading.user_id !== null)
+      : readings;
+  }, [readings, showUserReadingsOnly]);
 
   useEffect(() => {
     loadMapData();
   }, []);
 
-  const loadMapData = async () => {
+  const loadMapData = useCallback(async () => {
     try {
       setLoading(true);
       const response = await apiService.getMapData();
@@ -154,10 +156,10 @@ export const LightPollutionMap: React.FC = () => {
       setError('Failed to load map data');
       setLoading(false);
     }
-  };
+  }, []);
 
-  // Handle map click - fetch VIIRS data
-  const handleMapClick = async (lat: number, lng: number) => {
+  // Handle map click - fetch VIIRS data (memoized)
+  const handleMapClick = useCallback(async (lat: number, lng: number) => {
     setClickedPosition([lat, lng]);
     setViirsLoading(true);
 
@@ -170,10 +172,10 @@ export const LightPollutionMap: React.FC = () => {
     } finally {
       setViirsLoading(false);
     }
-  };
+  }, []);
 
-  // Search for location using Nominatim (OpenStreetMap)
-  const searchLocation = async (query: string) => {
+  // Search for location using Nominatim (OpenStreetMap) (memoized)
+  const searchLocation = useCallback(async (query: string) => {
     if (query.length < 3) {
       setSearchResults([]);
       return;
@@ -201,10 +203,10 @@ export const LightPollutionMap: React.FC = () => {
     } finally {
       setSearchLoading(false);
     }
-  };
+  }, []);
 
-  // Debounced search
-  const handleSearchInput = (value: string) => {
+  // Debounced search (memoized)
+  const handleSearchInput = useCallback((value: string) => {
     setSearchQuery(value);
 
     if (searchTimeoutRef.current) {
@@ -214,17 +216,17 @@ export const LightPollutionMap: React.FC = () => {
     searchTimeoutRef.current = setTimeout(() => {
       searchLocation(value);
     }, 500);
-  };
+  }, [searchLocation]);
 
-  // Select location from search results
-  const selectLocation = async (result: SearchResult) => {
+  // Select location from search results (memoized)
+  const selectLocation = useCallback(async (result: SearchResult) => {
     setSelectedLocation([result.lat, result.lon]);
     setShowSearchResults(false);
     setSearchQuery(result.name);
 
     // Fetch VIIRS data for selected location
     await handleMapClick(result.lat, result.lon);
-  };
+  }, [handleMapClick]);
 
   if (loading) {
     return (

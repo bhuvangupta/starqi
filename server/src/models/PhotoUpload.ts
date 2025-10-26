@@ -6,6 +6,7 @@ import {
   OneToOne,
   JoinColumn,
   BeforeInsert,
+  Index,
 } from 'typeorm';
 import { v4 as uuidv4 } from 'uuid';
 import { SkyReading } from './SkyReading';
@@ -18,6 +19,9 @@ export enum ProcessingStatus {
 }
 
 @Entity('photo_uploads')
+@Index('idx_created_at', ['created_at']) // Recent photos sorting
+@Index('idx_processing_status', ['processing_status']) // Filter by processing status
+@Index('idx_source_name', ['source_name']) // Filter by source (user vs crawled)
 export class PhotoUpload {
   @PrimaryColumn('varchar', { length: 36 })
   id: string;

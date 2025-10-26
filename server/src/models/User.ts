@@ -6,6 +6,7 @@ import {
   UpdateDateColumn,
   OneToMany,
   BeforeInsert,
+  Index,
 } from 'typeorm';
 import { v4 as uuidv4 } from 'uuid';
 import bcrypt from 'bcryptjs';
@@ -14,6 +15,8 @@ import { SqmDevice } from './SqmDevice';
 import { Contribution } from './Contribution';
 
 @Entity('users')
+@Index('idx_created_at', ['created_at']) // User growth stats
+@Index('idx_country', ['country']) // Country-based user queries
 export class User {
   @PrimaryColumn('varchar', { length: 36 })
   id: string;
