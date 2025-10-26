@@ -6,23 +6,48 @@ import { LightPollutionMap } from '../components/LightPollutionMap';
 import { IndiaMapPreview } from '../components/IndiaMapPreview';
 import { SEO } from '../components/SEO';
 import { StructuredData, createOrganizationSchema, createWebsiteSchema } from '../components/StructuredData';
+import { apiService } from '../services/api';
 
 export const HomePage: React.FC = () => {
   const { t, i18n } = useTranslation();
   const [stats, setStats] = useState({ users: 0, readings: 0, countries: 0 });
+  const [targetStats, setTargetStats] = useState({ users: 0, readings: 0, countries: 0 });
+
+  // Fetch real stats from API
+  useEffect(() => {
+    const fetchStats = async () => {
+      try {
+        const data = await apiService.getQuickStats();
+        setTargetStats({
+          users: data.totalUsers,
+          readings: data.totalReadings,
+          countries: data.countries
+        });
+      } catch (error) {
+        console.error('Failed to fetch stats:', error);
+        // Fallback to default values if API fails
+        setTargetStats({ users: 1247, readings: 746, countries: 7 });
+      }
+    };
+    fetchStats();
+  }, []);
 
   // Animated counter effect
   useEffect(() => {
+    if (targetStats.users === 0 && targetStats.readings === 0 && targetStats.countries === 0) {
+      return; // Wait for real stats to load
+    }
+
     const interval = setInterval(() => {
       setStats(prev => ({
-        users: Math.min(prev.users + 1, 1247),
-        readings: Math.min(prev.readings + 13, 746),
-        countries: Math.min(prev.countries + 1, 7)
+        users: Math.min(prev.users + Math.ceil(targetStats.users / 100), targetStats.users),
+        readings: Math.min(prev.readings + Math.ceil(targetStats.readings / 50), targetStats.readings),
+        countries: Math.min(prev.countries + 1, targetStats.countries)
       }));
     }, 30);
 
     return () => clearInterval(interval);
-  }, []);
+  }, [targetStats]);
 
   return (
     <>

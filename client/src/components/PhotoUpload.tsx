@@ -3,6 +3,7 @@ import { useDropzone } from 'react-dropzone';
 import { useTranslation } from 'react-i18next';
 import { apiService } from '../services/api';
 import { SkyReading, LightPollutionLevel } from '../types';
+import { ShareButtons } from './ShareButtons';
 
 interface LocationData {
   latitude: number;
@@ -330,6 +331,16 @@ export const PhotoUpload: React.FC = () => {
               <p className="text-sm text-blue-900 mt-1">
                 <strong>{t('upload.readingId')}</strong> {result.id}
               </p>
+            </div>
+
+            {/* Share Buttons */}
+            <div className="mt-6 pt-6 border-t border-gray-200">
+              <ShareButtons
+                url={`${window.location.origin}/#map`}
+                title={`I just measured light pollution in ${result.city || result.location_name || 'my area'}! 🌟`}
+                description={`SQM: ${result.sqm_value ? Number(result.sqm_value).toFixed(2) : 'N/A'} | Bortle: ${result.bortle_scale} | Sky Quality: ${result.light_pollution_level.replace('_', ' ')}`}
+                hashtags={['SkyQI', 'LightPollution', 'DarkSkies', 'CitizenScience']}
+              />
             </div>
           </div>
         </div>

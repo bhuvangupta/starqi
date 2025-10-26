@@ -73,11 +73,14 @@ export const Layout: React.FC = () => {
 
               {isAuthenticated ? (
                 <div className="flex items-center gap-3 ml-4 pl-4 border-l border-white/20">
-                  <div className="px-3 py-1.5 bg-white/10 backdrop-blur-md rounded-lg border border-white/20">
-                    <span className="text-cyan-300 text-sm font-medium">
-                      {t('nav.hi')}, <span className="font-bold">{user?.username}</span>
+                  <Link
+                    to="/profile"
+                    className="px-3 py-1.5 bg-white/10 backdrop-blur-md rounded-lg border border-white/20 hover:bg-white/20 transition-all"
+                  >
+                    <span className="text-cyan-300 text-sm font-medium hover:text-white transition-colors">
+                      {t('nav.hi')}, <span className="font-bold">{user?.full_name || user?.username}</span>
                     </span>
-                  </div>
+                  </Link>
                   <button
                     onClick={logout}
                     className="px-4 py-2 bg-red-500 hover:bg-red-600 text-white font-semibold rounded-lg transition-all duration-200 hover:scale-105"
@@ -167,11 +170,15 @@ export const Layout: React.FC = () => {
 
               {isAuthenticated ? (
                 <div className="pt-2 space-y-2">
-                  <div className="px-4 py-2 bg-white/10 backdrop-blur-md rounded-lg border border-white/20">
+                  <Link
+                    to="/profile"
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="block px-4 py-3 bg-white/10 backdrop-blur-md rounded-lg border border-white/20 hover:bg-white/20 transition-all"
+                  >
                     <span className="text-cyan-300 text-sm font-medium">
-                      {t('nav.hi')}, <span className="font-bold">{user?.username}</span>
+                      👤 {t('nav.hi')}, <span className="font-bold">{user?.full_name || user?.username}</span>
                     </span>
-                  </div>
+                  </Link>
                   <button
                     onClick={() => {
                       logout();

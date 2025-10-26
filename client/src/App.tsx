@@ -10,6 +10,7 @@ import { BlogPage } from './pages/BlogPage';
 import { ArticleDetailPage } from './pages/ArticleDetailPage';
 import { AdminArticlesPage } from './pages/AdminArticlesPage';
 import { LoginPage } from './pages/LoginPage';
+import { UserProfilePage } from './pages/UserProfilePage';
 import { useAuthStore } from './stores/authStore';
 import { GoogleAnalytics } from './components/GoogleAnalytics';
 
@@ -42,6 +43,7 @@ function App() {
             <Route path="impact" element={<ImpactPage />} />
             <Route path="blog" element={<BlogPage />} />
             <Route path="blog/:slug" element={<ArticleDetailPage />} />
+            <Route path="profile" element={<UserProfilePage />} />
             <Route path="admin/articles" element={<AdminArticlesPage />} />
           </Route>
         </Routes>

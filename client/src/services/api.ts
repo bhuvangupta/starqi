@@ -221,6 +221,35 @@ class ApiService {
     const response = await this.api.delete(`/articles/admin/${id}`);
     return response.data;
   }
+
+  // User endpoints
+  async getUserStats(userId: string = 'me'): Promise<{
+    user: any;
+    stats: {
+      totalReadings: number;
+      rank: number | null;
+      bestReading: any;
+      averageSqm: string | null;
+      averageBortle: string | null;
+      citiesCount: number;
+      countriesCount: number;
+      recentReadings: any[];
+    };
+  }> {
+    const response = await this.api.get(`/users/${userId}/stats`);
+    return response.data;
+  }
+
+  async getUserReadings(
+    userId: string = 'me',
+    params?: { page?: number; limit?: number }
+  ): Promise<{
+    readings: SkyReading[];
+    pagination: { page: number; limit: number; total: number; totalPages: number };
+  }> {
+    const response = await this.api.get(`/users/${userId}/readings`, { params });
+    return response.data;
+  }
 }
 
 export const apiService = new ApiService();
