@@ -116,66 +116,102 @@ export const PhotoUpload: React.FC = () => {
   };
 
   return (
-    <div className="max-w-4xl mx-auto p-6 space-y-6">
-      <div className="bg-white rounded-lg shadow-lg p-6">
-        <h2 className="text-2xl font-bold mb-4 text-gray-800">{t('upload.uploadSkyPhoto')}</h2>
+    <div className="max-w-4xl mx-auto space-y-6">
+      <div className="bg-white rounded-2xl shadow-xl p-8 border border-gray-100">
+        <div className="flex items-center gap-3 mb-6">
+          <div className="text-3xl">📸</div>
+          <h2 className="text-3xl font-black text-gray-800">{t('upload.uploadSkyPhoto')}</h2>
+        </div>
 
         {/* File Upload */}
         <div
           {...getRootProps()}
-          className={`border-2 border-dashed rounded-lg p-8 text-center cursor-pointer transition-colors ${
+          className={`border-2 border-dashed rounded-2xl p-8 text-center cursor-pointer transition-all duration-300 ${
             isDragActive
-              ? 'border-blue-500 bg-blue-50'
-              : 'border-gray-300 hover:border-gray-400'
+              ? 'border-purple-500 bg-purple-50 scale-105 shadow-lg'
+              : preview
+              ? 'border-green-400 bg-green-50 hover:border-green-500'
+              : 'border-gray-300 hover:border-purple-400 hover:bg-gray-50'
           }`}
         >
           <input {...getInputProps()} />
           {preview ? (
             <div>
-              <img
-                src={preview}
-                alt="Preview"
-                className="max-h-64 mx-auto rounded-lg mb-4"
-              />
-              <p className="text-sm text-gray-600">{t('upload.clickOrDragToReplace')}</p>
+              <div className="relative inline-block">
+                <img
+                  src={preview}
+                  alt="Preview"
+                  className="max-h-64 mx-auto rounded-xl mb-4 shadow-lg"
+                />
+                <div className="absolute top-2 right-2 bg-green-500 text-white px-3 py-1 rounded-full text-xs font-bold">
+                  ✓ Ready
+                </div>
+              </div>
+              <p className="text-sm text-gray-600 font-medium">{t('upload.clickOrDragToReplace')}</p>
+              <p className="text-xs text-gray-500 mt-1">or upload a different photo</p>
             </div>
           ) : (
             <div>
-              <svg
-                className="mx-auto h-12 w-12 text-gray-400"
-                stroke="currentColor"
-                fill="none"
-                viewBox="0 0 48 48"
-              >
-                <path
-                  d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02"
-                  strokeWidth={2}
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </svg>
-              <p className="mt-2 text-sm text-gray-600">
+              <div className="mx-auto w-16 h-16 mb-4 bg-gradient-to-br from-purple-100 to-pink-100 rounded-full flex items-center justify-center">
+                <svg
+                  className="h-8 w-8 text-purple-600"
+                  stroke="currentColor"
+                  fill="none"
+                  viewBox="0 0 48 48"
+                >
+                  <path
+                    d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02"
+                    strokeWidth={2}
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </svg>
+              </div>
+              <p className="text-lg font-semibold text-gray-800 mb-2">
                 {isDragActive
-                  ? t('upload.dropImageHere')
-                  : t('upload.dragAndDropMessage')}
+                  ? '✨ Drop your photo here!'
+                  : '📸 Drag & drop your night sky photo'}
               </p>
-              <p className="text-xs text-gray-500 mt-1">
-                {t('upload.fileSizeLimit')}
+              <p className="text-sm text-gray-600 mb-3">
+                or click to browse from your device
+              </p>
+              <p className="text-xs text-gray-500">
+                JPG or PNG • Max 10MB • Any camera works!
               </p>
             </div>
           )}
         </div>
 
         {/* Location Input */}
-        <div className="mt-6 space-y-4">
+        <div className="mt-8 space-y-4">
+          <div className="flex items-center gap-2 mb-4">
+            <div className="text-2xl">📍</div>
+            <h3 className="text-xl font-bold text-gray-800">Location Details</h3>
+          </div>
+
           <div className="flex gap-2">
             <button
               onClick={getCurrentLocation}
               disabled={gettingLocation}
-              className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:bg-gray-400"
+              className="group px-6 py-3 bg-gradient-to-r from-blue-600 to-cyan-600 text-white font-semibold rounded-xl hover:from-blue-700 hover:to-cyan-700 disabled:from-gray-400 disabled:to-gray-400 transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105 disabled:hover:scale-100 flex items-center gap-2"
             >
-              {gettingLocation ? t('upload.gettingLocation') : t('upload.useCurrentLocation')}
+              {gettingLocation ? (
+                <>
+                  <div className="animate-spin rounded-full h-4 w-4 border-2 border-white border-t-transparent"></div>
+                  {t('upload.gettingLocation')}
+                </>
+              ) : (
+                <>
+                  <span className="text-lg">📍</span>
+                  {t('upload.useCurrentLocation')}
+                </>
+              )}
             </button>
+            {(location.latitude !== 0 || location.longitude !== 0) && (
+              <div className="px-4 py-3 bg-green-100 text-green-700 rounded-xl font-medium flex items-center gap-2">
+                ✓ Location set
+              </div>
+            )}
           </div>
 
           <div className="grid grid-cols-2 gap-4">
@@ -190,7 +226,7 @@ export const PhotoUpload: React.FC = () => {
                 onChange={(e) =>
                   setLocation({ ...location, latitude: parseFloat(e.target.value) || 0 })
                 }
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                className="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-colors"
                 placeholder="0.0"
               />
             </div>
@@ -205,7 +241,7 @@ export const PhotoUpload: React.FC = () => {
                 onChange={(e) =>
                   setLocation({ ...location, longitude: parseFloat(e.target.value) || 0 })
                 }
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                className="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-colors"
                 placeholder="0.0"
               />
             </div>
@@ -222,7 +258,7 @@ export const PhotoUpload: React.FC = () => {
                 onChange={(e) =>
                   setLocation({ ...location, location_name: e.target.value })
                 }
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                className="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-colors"
                 placeholder={t('upload.locationNamePlaceholder')}
               />
             </div>
@@ -234,7 +270,7 @@ export const PhotoUpload: React.FC = () => {
                 type="text"
                 value={location.city}
                 onChange={(e) => setLocation({ ...location, city: e.target.value })}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                className="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-colors"
                 placeholder={t('upload.cityPlaceholder')}
               />
             </div>
@@ -248,7 +284,7 @@ export const PhotoUpload: React.FC = () => {
                 onChange={(e) =>
                   setLocation({ ...location, country: e.target.value })
                 }
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                className="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-colors"
                 placeholder={t('upload.countryPlaceholder')}
               />
             </div>
@@ -257,80 +293,142 @@ export const PhotoUpload: React.FC = () => {
 
         {/* Error Message */}
         {error && (
-          <div className="mt-4 p-4 bg-red-50 border border-red-200 rounded-lg text-red-700">
-            {error}
+          <div className="mt-4 p-4 bg-red-50 border-2 border-red-200 rounded-xl text-red-700 flex items-start gap-3">
+            <span className="text-xl">⚠️</span>
+            <div>
+              <p className="font-semibold mb-1">Oops! Something went wrong</p>
+              <p className="text-sm">{error}</p>
+            </div>
           </div>
         )}
 
         {/* Upload Button */}
         <button
           onClick={handleUpload}
-          disabled={!file || loading}
-          className="mt-6 w-full px-6 py-3 bg-green-600 text-white font-semibold rounded-lg hover:bg-green-700 disabled:bg-gray-400 disabled:cursor-not-allowed"
+          disabled={!file || loading || (location.latitude === 0 && location.longitude === 0)}
+          className="mt-8 w-full px-8 py-4 bg-gradient-to-r from-green-600 via-emerald-600 to-teal-600 text-white text-lg font-black rounded-2xl hover:from-green-700 hover:via-emerald-700 hover:to-teal-700 disabled:from-gray-300 disabled:via-gray-300 disabled:to-gray-300 disabled:cursor-not-allowed transition-all duration-300 shadow-xl hover:shadow-2xl hover:scale-105 disabled:hover:scale-100 flex items-center justify-center gap-3"
         >
-          {loading ? t('upload.analyzing') : t('upload.uploadAndAnalyze')}
+          {loading ? (
+            <>
+              <div className="animate-spin rounded-full h-6 w-6 border-3 border-white border-t-transparent"></div>
+              <span>{t('upload.analyzing')}</span>
+            </>
+          ) : (
+            <>
+              <span className="text-2xl">🚀</span>
+              <span>{t('upload.uploadAndAnalyze')}</span>
+            </>
+          )}
         </button>
+
+        {!file && (
+          <p className="text-center text-sm text-gray-500 mt-3">
+            Please upload a photo to continue
+          </p>
+        )}
+        {file && (location.latitude === 0 && location.longitude === 0) && (
+          <p className="text-center text-sm text-gray-500 mt-3">
+            Please set your location to continue
+          </p>
+        )}
       </div>
 
       {/* Results */}
       {result && (
-        <div className="bg-white rounded-lg shadow-lg p-6">
-          <h3 className="text-xl font-bold mb-4 text-gray-800">{t('upload.analysisResults')}</h3>
+        <div className="bg-gradient-to-br from-white to-gray-50 rounded-2xl shadow-2xl p-8 border border-gray-200">
+          <div className="flex items-center gap-3 mb-6">
+            <div className="text-4xl">🎉</div>
+            <div>
+              <h3 className="text-3xl font-black text-gray-800">{t('upload.analysisResults')}</h3>
+              <p className="text-gray-600">Your sky quality data is ready!</p>
+            </div>
+          </div>
 
-          <div className="space-y-4">
-            <div className="flex items-center justify-between">
-              <span className="text-gray-700 font-medium">{t('upload.lightPollutionLevel')}</span>
-              <span
-                className={`px-4 py-2 rounded-full font-semibold uppercase text-sm ${getPollutionColor(
-                  result.light_pollution_level
-                )}`}
-              >
-                {result.light_pollution_level.replace('_', ' ')}
-              </span>
+          <div className="space-y-6">
+            <div className="bg-gradient-to-r from-purple-50 to-pink-50 p-6 rounded-2xl border-2 border-purple-200">
+              <div className="flex items-center justify-between">
+                <span className="text-gray-700 font-bold text-lg">{t('upload.lightPollutionLevel')}</span>
+                <span
+                  className={`px-6 py-3 rounded-2xl font-black uppercase text-base shadow-lg ${getPollutionColor(
+                    result.light_pollution_level
+                  )}`}
+                >
+                  {result.light_pollution_level.replace('_', ' ')}
+                </span>
+              </div>
             </div>
 
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-              <div className="bg-gray-50 p-4 rounded-lg">
-                <p className="text-sm text-gray-600">{t('upload.sqmValue')}</p>
-                <p className="text-2xl font-bold text-gray-900">
+              <div className="bg-gradient-to-br from-blue-50 to-cyan-50 p-6 rounded-2xl border-2 border-blue-200 hover:shadow-lg transition-shadow">
+                <p className="text-sm text-blue-600 font-semibold mb-2">{t('upload.sqmValue')}</p>
+                <p className="text-3xl font-black text-blue-900">
                   {result.sqm_value ? Number(result.sqm_value).toFixed(2) : 'N/A'}
                 </p>
-                <p className="text-xs text-gray-500">{t('upload.sqmUnit')}</p>
+                <p className="text-xs text-blue-600 mt-1">{t('upload.sqmUnit')}</p>
               </div>
 
-              <div className="bg-gray-50 p-4 rounded-lg">
-                <p className="text-sm text-gray-600">{t('upload.bortleScale')}</p>
-                <p className="text-2xl font-bold text-gray-900">
+              <div className="bg-gradient-to-br from-purple-50 to-pink-50 p-6 rounded-2xl border-2 border-purple-200 hover:shadow-lg transition-shadow">
+                <p className="text-sm text-purple-600 font-semibold mb-2">{t('upload.bortleScale')}</p>
+                <p className="text-3xl font-black text-purple-900">
                   {result.bortle_scale}
                 </p>
-                <p className="text-xs text-gray-500">{t('upload.bortleDescription')}</p>
+                <p className="text-xs text-purple-600 mt-1">{t('upload.bortleDescription')}</p>
               </div>
 
-              <div className="bg-gray-50 p-4 rounded-lg">
-                <p className="text-sm text-gray-600">{t('upload.starsDetected')}</p>
-                <p className="text-2xl font-bold text-gray-900">
+              <div className="bg-gradient-to-br from-yellow-50 to-orange-50 p-6 rounded-2xl border-2 border-yellow-200 hover:shadow-lg transition-shadow">
+                <p className="text-sm text-orange-600 font-semibold mb-2">{t('upload.starsDetected')}</p>
+                <p className="text-3xl font-black text-orange-900">
                   {result.star_count}
                 </p>
-                <p className="text-xs text-gray-500">{t('upload.starsUnit')}</p>
+                <p className="text-xs text-orange-600 mt-1">{t('upload.starsUnit')}</p>
               </div>
 
-              <div className="bg-gray-50 p-4 rounded-lg">
-                <p className="text-sm text-gray-600">{t('upload.skyBrightness')}</p>
-                <p className="text-2xl font-bold text-gray-900">
+              <div className="bg-gradient-to-br from-green-50 to-emerald-50 p-6 rounded-2xl border-2 border-green-200 hover:shadow-lg transition-shadow">
+                <p className="text-sm text-green-600 font-semibold mb-2">{t('upload.skyBrightness')}</p>
+                <p className="text-3xl font-black text-green-900">
                   {result.sky_brightness ? Number(result.sky_brightness).toFixed(1) : 'N/A'}
                 </p>
-                <p className="text-xs text-gray-500">{t('upload.brightnessUnit')}</p>
+                <p className="text-xs text-green-600 mt-1">{t('upload.brightnessUnit')}</p>
               </div>
             </div>
 
-            <div className="mt-4 p-4 bg-blue-50 border border-blue-200 rounded-lg">
-              <p className="text-sm text-blue-900">
-                <strong>{t('upload.locationLabel')}</strong>{' '}
-                {result.location_name || `${result.latitude}, ${result.longitude}`}
-              </p>
-              <p className="text-sm text-blue-900 mt-1">
-                <strong>{t('upload.readingId')}</strong> {result.id}
-              </p>
+            <div className="bg-gradient-to-r from-blue-50 to-indigo-50 p-6 rounded-2xl border-2 border-blue-200">
+              <div className="space-y-3">
+                <div className="flex items-start gap-2">
+                  <span className="text-xl">📍</span>
+                  <div>
+                    <p className="text-sm text-blue-700 font-semibold mb-1">{t('upload.locationLabel')}</p>
+                    <p className="text-base text-blue-900 font-medium">
+                      {result.location_name || `${result.latitude}, ${result.longitude}`}
+                    </p>
+                  </div>
+                </div>
+                <div className="flex items-start gap-2">
+                  <span className="text-xl">🆔</span>
+                  <div>
+                    <p className="text-sm text-blue-700 font-semibold mb-1">{t('upload.readingId')}</p>
+                    <p className="text-sm text-blue-900 font-mono">{result.id}</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* View on Map Button */}
+            <div className="mt-6 flex gap-4">
+              <a
+                href="/map"
+                className="flex-1 px-6 py-4 bg-gradient-to-r from-cyan-600 to-blue-600 text-white font-bold rounded-2xl hover:from-cyan-700 hover:to-blue-700 transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105 flex items-center justify-center gap-2"
+              >
+                <span className="text-xl">🗺️</span>
+                <span>View on Map</span>
+              </a>
+              <a
+                href="/gallery"
+                className="flex-1 px-6 py-4 bg-gradient-to-r from-purple-600 to-pink-600 text-white font-bold rounded-2xl hover:from-purple-700 hover:to-pink-700 transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105 flex items-center justify-center gap-2"
+              >
+                <span className="text-xl">🌌</span>
+                <span>View Gallery</span>
+              </a>
             </div>
 
             {/* Share Buttons */}
