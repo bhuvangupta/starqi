@@ -250,6 +250,60 @@ class ApiService {
     const response = await this.api.get(`/users/${userId}/readings`, { params });
     return response.data;
   }
+
+  // Photo endpoints
+  async getPhotoFeed(params?: { page?: number; limit?: number }): Promise<{
+    photos: any[];
+    pagination: { page: number; limit: number; total: number; totalPages: number };
+  }> {
+    const response = await this.api.get('/photos/feed', { params });
+    return response.data;
+  }
+
+  async getPhotoDetails(photoId: string): Promise<{ photo: any }> {
+    const response = await this.api.get(`/photos/${photoId}`);
+    return response.data;
+  }
+
+  // VIIRS (Satellite Light Pollution Data) endpoints
+  async getLightPollutionEstimate(lat: number, lng: number): Promise<{
+    success: boolean;
+    data: {
+      radiance: number;
+      sqm: number;
+      bortleScale: number;
+      lightPollutionLevel: string;
+      nelm: number;
+      source: string;
+      dataYear: number;
+      coordinates: { latitude: number; longitude: number };
+    };
+  }> {
+    const response = await this.api.get('/viirs/estimate', {
+      params: { lat, lng },
+    });
+    return response.data;
+  }
+
+  async getLightPollutionRegionStats(bounds: {
+    minLat: number;
+    maxLat: number;
+    minLon: number;
+    maxLon: number;
+  }): Promise<{
+    success: boolean;
+    data: {
+      avgRadiance: number;
+      avgSQM: number;
+      avgBortle: number;
+      dataPoints: number;
+    };
+  }> {
+    const response = await this.api.get('/viirs/region', {
+      params: bounds,
+    });
+    return response.data;
+  }
 }
 
 export const apiService = new ApiService();

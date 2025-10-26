@@ -71,6 +71,22 @@ export class PhotoUpload {
   @Column({ type: 'text', nullable: true })
   processing_error: string | null;
 
+  // Photo attribution (for crawled photos)
+  @Column({ type: 'varchar', length: 100, nullable: true })
+  source_name: string | null; // e.g., "NASA APOD", "Unsplash", "User Upload"
+
+  @Column({ type: 'varchar', length: 512, nullable: true })
+  source_url: string | null; // Original photo URL
+
+  @Column({ type: 'varchar', length: 255, nullable: true })
+  photographer_name: string | null; // Photographer name if different from user
+
+  @Column({ type: 'varchar', length: 100, nullable: true })
+  license_type: string | null; // e.g., "Public Domain", "CC BY 4.0"
+
+  @Column({ type: 'text', nullable: true })
+  attribution_text: string | null; // Full attribution text
+
   @CreateDateColumn({ type: 'timestamp' })
   created_at: Date;
 

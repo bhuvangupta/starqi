@@ -101,12 +101,12 @@ export const HomePage: React.FC = () => {
                   </span>
                 </Link>
 
-                <a
-                  href="#map"
+                <Link
+                  to="/map"
                   className="px-8 py-4 bg-purple-800/40 backdrop-blur-md text-white font-bold rounded-2xl hover:bg-purple-800/60 transition-all duration-300 border-2 border-white/30 hover:border-white/50 text-center"
                 >
                   🗺️ {t('home.exploreMap')}
-                </a>
+                </Link>
               </div>
             </div>
 

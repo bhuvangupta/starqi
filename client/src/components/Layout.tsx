@@ -53,19 +53,26 @@ export const Layout: React.FC = () => {
                 {t('nav.learn')}
               </Link>
               <Link
+                to="/gallery"
+                className="px-4 py-2 text-white hover:text-cyan-300 hover:bg-white/10 rounded-lg transition-all duration-200 font-medium inline-flex items-center gap-1.5"
+              >
+                <span>🌌</span>
+                Gallery
+              </Link>
+              <Link
                 to="/upload"
                 className="px-4 py-2.5 bg-gradient-to-r from-purple-600 to-pink-600 text-white font-bold rounded-xl hover:from-purple-500 hover:to-pink-500 transition-all duration-300 shadow-lg hover:shadow-purple-500/50 hover:scale-105 inline-flex items-center gap-2 ml-2"
               >
                 <span>📸</span>
                 {t('nav.upload')}
               </Link>
-              <a
-                href="/#map"
+              <Link
+                to="/map"
                 className="px-5 py-2.5 bg-gradient-to-r from-cyan-500 to-blue-500 text-white font-bold rounded-xl hover:from-cyan-400 hover:to-blue-400 transition-all duration-300 shadow-lg hover:shadow-cyan-500/50 hover:scale-105 inline-flex items-center gap-2"
               >
                 <span className="text-xl">🗺️</span>
                 {t('nav.map')}
-              </a>
+              </Link>
 
               <div className="ml-2">
                 <LanguageSwitcher />
@@ -148,19 +155,26 @@ export const Layout: React.FC = () => {
                 📚 {t('nav.learn')}
               </Link>
               <Link
+                to="/gallery"
+                onClick={() => setMobileMenuOpen(false)}
+                className="block px-4 py-3 text-white hover:bg-white/10 rounded-lg transition-all duration-200 font-medium"
+              >
+                🌌 Gallery
+              </Link>
+              <Link
                 to="/upload"
                 onClick={() => setMobileMenuOpen(false)}
                 className="block px-4 py-3 bg-gradient-to-r from-purple-600 to-pink-600 text-white font-bold rounded-xl text-center"
               >
                 📸 {t('nav.upload')}
               </Link>
-              <a
-                href="/#map"
+              <Link
+                to="/map"
                 onClick={() => setMobileMenuOpen(false)}
                 className="block px-4 py-3 bg-gradient-to-r from-cyan-500 to-blue-500 text-white font-bold rounded-xl text-center"
               >
                 🗺️ {t('nav.map')}
-              </a>
+              </Link>
 
               <div className="pt-2 border-t border-white/20">
                 <div className="px-4 py-2">

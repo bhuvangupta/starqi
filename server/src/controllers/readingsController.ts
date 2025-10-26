@@ -148,6 +148,7 @@ export const getMapData = async (
       .createQueryBuilder('reading')
       .select([
         'reading.id',
+        'reading.user_id',
         'reading.latitude',
         'reading.longitude',
         'reading.bortle_scale',
@@ -156,6 +157,8 @@ export const getMapData = async (
         'reading.location_name',
         'reading.city',
         'reading.country',
+        'reading.observation_datetime',
+        'reading.reading_type',
       ])
       .orderBy('reading.observation_datetime', 'DESC')
       .limit(1000) // Limit for performance

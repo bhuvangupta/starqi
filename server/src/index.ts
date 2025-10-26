@@ -14,6 +14,8 @@ import readingsRoutes from './routes/readingsRoutes';
 import statsRoutes from './routes/statsRoutes';
 import articleRoutes from './routes/articleRoutes';
 import userRoutes from './routes/userRoutes';
+import photoRoutes from './routes/photoRoutes';
+import viirsRoutes from './routes/viirsRoutes';
 
 // Load environment variables
 dotenv.config();
@@ -22,7 +24,20 @@ const app: Application = express();
 const PORT = process.env.PORT || 5000;
 
 // Middleware
-app.use(helmet()); // Security headers
+// Configure helmet with relaxed CSP for development (allow cross-origin images)
+app.use(
+  helmet({
+    contentSecurityPolicy: {
+      directives: {
+        defaultSrc: ["'self'"],
+        imgSrc: ["'self'", 'data:', 'http:', 'https:'], // Allow images from any HTTP/HTTPS source
+        styleSrc: ["'self'", "'unsafe-inline'", 'https:'],
+        scriptSrc: ["'self'"],
+      },
+    },
+    crossOriginResourcePolicy: { policy: 'cross-origin' }, // Allow cross-origin resource loading
+  })
+); // Security headers
 
 // CORS - handle multiple origins
 const corsOrigins = process.env.CORS_ORIGIN
@@ -44,6 +59,8 @@ app.use('/api/readings', readingsRoutes);
 app.use('/api/stats', statsRoutes);
 app.use('/api/articles', articleRoutes);
 app.use('/api/users', userRoutes);
+app.use('/api/photos', photoRoutes);
+app.use('/api/viirs', viirsRoutes);
 
 // Health check
 app.get('/health', (req: Request, res: Response) => {

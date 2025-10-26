@@ -11,6 +11,8 @@ import { ArticleDetailPage } from './pages/ArticleDetailPage';
 import { AdminArticlesPage } from './pages/AdminArticlesPage';
 import { LoginPage } from './pages/LoginPage';
 import { UserProfilePage } from './pages/UserProfilePage';
+import { PhotoGalleryPage } from './pages/PhotoGalleryPage';
+import { MapPage } from './pages/MapPage';
 import { useAuthStore } from './stores/authStore';
 import { GoogleAnalytics } from './components/GoogleAnalytics';
 
@@ -39,6 +41,8 @@ function App() {
           <Route path="/" element={<Layout />}>
             <Route index element={<HomePage />} />
             <Route path="upload" element={<UploadPage />} />
+            <Route path="map" element={<MapPage />} />
+            <Route path="gallery" element={<PhotoGalleryPage />} />
             <Route path="about" element={<AboutPage />} />
             <Route path="impact" element={<ImpactPage />} />
             <Route path="blog" element={<BlogPage />} />
