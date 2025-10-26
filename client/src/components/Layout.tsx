@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link, Outlet } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useAuthStore } from '../stores/authStore';
@@ -7,26 +7,27 @@ import { LanguageSwitcher } from './LanguageSwitcher';
 export const Layout: React.FC = () => {
   const { isAuthenticated, user, logout } = useAuthStore();
   const { t } = useTranslation();
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header - Modern & Sleek */}
       <header className="sticky top-0 z-50 bg-gradient-to-r from-indigo-900 via-purple-900 to-pink-900 text-white shadow-2xl backdrop-blur-lg border-b border-white/10">
-        <div className="container mx-auto px-6 py-4">
+        <div className="container mx-auto px-4 sm:px-6 py-4">
           <div className="flex items-center justify-between">
             {/* Logo - Enhanced */}
-            <Link to="/" className="group flex items-center gap-3 hover:scale-105 transition-transform duration-300">
-              <div className="text-4xl group-hover:rotate-12 transition-transform duration-300">🌌</div>
+            <Link to="/" className="group flex items-center gap-2 sm:gap-3 hover:scale-105 transition-transform duration-300 flex-shrink-0">
+              <div className="text-3xl sm:text-4xl group-hover:rotate-12 transition-transform duration-300">🌌</div>
               <div>
-                <h1 className="text-3xl font-black bg-gradient-to-r from-cyan-300 to-blue-300 bg-clip-text text-transparent">
+                <h1 className="text-xl sm:text-3xl font-black bg-gradient-to-r from-cyan-300 to-blue-300 bg-clip-text text-transparent">
                   SkyQI
                 </h1>
-                <p className="text-xs text-purple-300 font-medium">{t('layout.subtitle')}</p>
+                <p className="hidden sm:block text-xs text-purple-300 font-medium">{t('layout.subtitle')}</p>
               </div>
             </Link>
 
-            {/* Navigation - Modern Link Styles */}
-            <nav className="flex items-center gap-2">
+            {/* Desktop Navigation */}
+            <nav className="hidden lg:flex items-center gap-2">
               <Link
                 to="/"
                 className="px-4 py-2 text-white hover:text-cyan-300 hover:bg-white/10 rounded-lg transition-all duration-200 font-medium"
@@ -93,7 +94,105 @@ export const Layout: React.FC = () => {
                 </Link>
               )}
             </nav>
+
+            {/* Mobile Menu Button */}
+            <button
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              className="lg:hidden p-2 text-white hover:bg-white/10 rounded-lg transition-colors"
+              aria-label="Toggle menu"
+            >
+              {mobileMenuOpen ? (
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              ) : (
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+                </svg>
+              )}
+            </button>
           </div>
+
+          {/* Mobile Navigation Menu */}
+          {mobileMenuOpen && (
+            <div className="lg:hidden mt-4 pb-4 space-y-2">
+              <Link
+                to="/"
+                onClick={() => setMobileMenuOpen(false)}
+                className="block px-4 py-3 text-white hover:bg-white/10 rounded-lg transition-all duration-200 font-medium"
+              >
+                🏠 {t('nav.home')}
+              </Link>
+              <Link
+                to="/about"
+                onClick={() => setMobileMenuOpen(false)}
+                className="block px-4 py-3 text-white hover:bg-white/10 rounded-lg transition-all duration-200 font-medium"
+              >
+                ℹ️ {t('nav.about')}
+              </Link>
+              <Link
+                to="/impact"
+                onClick={() => setMobileMenuOpen(false)}
+                className="block px-4 py-3 text-white hover:bg-white/10 rounded-lg transition-all duration-200 font-medium"
+              >
+                📊 {t('nav.impact')}
+              </Link>
+              <Link
+                to="/blog"
+                onClick={() => setMobileMenuOpen(false)}
+                className="block px-4 py-3 text-white hover:bg-white/10 rounded-lg transition-all duration-200 font-medium"
+              >
+                📚 {t('nav.learn')}
+              </Link>
+              <Link
+                to="/upload"
+                onClick={() => setMobileMenuOpen(false)}
+                className="block px-4 py-3 bg-gradient-to-r from-purple-600 to-pink-600 text-white font-bold rounded-xl text-center"
+              >
+                📸 {t('nav.upload')}
+              </Link>
+              <a
+                href="/#map"
+                onClick={() => setMobileMenuOpen(false)}
+                className="block px-4 py-3 bg-gradient-to-r from-cyan-500 to-blue-500 text-white font-bold rounded-xl text-center"
+              >
+                🗺️ {t('nav.map')}
+              </a>
+
+              <div className="pt-2 border-t border-white/20">
+                <div className="px-4 py-2">
+                  <LanguageSwitcher />
+                </div>
+              </div>
+
+              {isAuthenticated ? (
+                <div className="pt-2 space-y-2">
+                  <div className="px-4 py-2 bg-white/10 backdrop-blur-md rounded-lg border border-white/20">
+                    <span className="text-cyan-300 text-sm font-medium">
+                      {t('nav.hi')}, <span className="font-bold">{user?.username}</span>
+                    </span>
+                  </div>
+                  <button
+                    onClick={() => {
+                      logout();
+                      setMobileMenuOpen(false);
+                    }}
+                    className="w-full px-4 py-3 bg-red-500 hover:bg-red-600 text-white font-semibold rounded-lg transition-all duration-200"
+                  >
+                    {t('nav.logout')}
+                  </button>
+                </div>
+              ) : (
+                <Link
+                  to="/login"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="block px-4 py-3 bg-white/10 backdrop-blur-md text-white font-bold rounded-lg hover:bg-white/20 transition-all duration-200 border border-white/30 text-center"
+                >
+                  {t('nav.login')}
+                </Link>
+              )}
+            </div>
+          )}
         </div>
       </header>
 
