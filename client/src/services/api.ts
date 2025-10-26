@@ -6,6 +6,11 @@ import {
   SkyReading,
   Statistics,
   MapReading,
+  SendOTPRequest,
+  SendOTPResponse,
+  VerifyOTPRequest,
+  VerifyOTPResponse,
+  CompleteProfileRequest,
 } from '../types';
 
 const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001/api';
@@ -44,6 +49,22 @@ class ApiService {
 
   async getProfile(): Promise<{ user: any }> {
     const response = await this.api.get('/auth/profile');
+    return response.data;
+  }
+
+  // OTP-based authentication
+  async sendOTP(data: SendOTPRequest): Promise<SendOTPResponse> {
+    const response = await this.api.post<SendOTPResponse>('/auth/send-otp', data);
+    return response.data;
+  }
+
+  async verifyOTP(data: VerifyOTPRequest): Promise<VerifyOTPResponse> {
+    const response = await this.api.post<VerifyOTPResponse>('/auth/verify-otp', data);
+    return response.data;
+  }
+
+  async completeProfile(data: CompleteProfileRequest): Promise<AuthResponse> {
+    const response = await this.api.post<AuthResponse>('/auth/complete-profile', data);
     return response.data;
   }
 

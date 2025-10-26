@@ -139,7 +139,19 @@ export const LightPollutionMap: React.FC = () => {
                     {reading.sqm_value && (
                       <p className="text-sm">
                         <span className="font-semibold">SQM:</span>{' '}
-                        {reading.sqm_value.toFixed(2)} mag/arcsec²
+                        {Number(reading.sqm_value).toFixed(2)} mag/arcsec²
+                      </p>
+                    )}
+                    {reading.observation_datetime && (
+                      <p className="text-xs text-gray-500 mt-1">
+                        <span className="font-semibold">{t('map.lastReading')}:</span>{' '}
+                        {new Date(reading.observation_datetime).toLocaleDateString(i18n.language, {
+                          year: 'numeric',
+                          month: 'short',
+                          day: 'numeric',
+                          hour: '2-digit',
+                          minute: '2-digit'
+                        })}
                       </p>
                     )}
                     {reading.bortle_scale && (

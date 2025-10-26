@@ -85,6 +85,9 @@ const startServer = async () => {
   try {
     await initializeDatabase();
 
+    // Initialize SQM crawler scheduler (if enabled)
+    import('./schedulers/sqmScheduler');
+
     app.listen(PORT, () => {
       console.log(`
 ╔═══════════════════════════════════════════════════════════╗

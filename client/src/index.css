@@ -36,3 +36,13 @@ body {
   margin: 0;
   min-width: 200px;
 }
+
+/* Custom Animation Delays for Gen Z Homepage */
+@layer utilities {
+  .delay-75 {
+    animation-delay: 75ms;
+  }
+  .delay-150 {
+    animation-delay: 150ms;
+  }
+}

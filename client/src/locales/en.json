@@ -252,6 +252,7 @@
     "level": "Level",
     "bortle": "Bortle",
     "class": "Class",
+    "lastReading": "Last Reading",
     "showingReadings": "Showing",
     "readingsFromWorld": "sky quality readings from around the world",
     "bortleDescriptions": {

@@ -252,6 +252,7 @@
     "level": "स्तर",
     "bortle": "बोर्टल",
     "class": "कक्षा",
+    "lastReading": "अंतिम रीडिंग",
     "showingReadings": "दिखा रहे हैं",
     "readingsFromWorld": "दुनिया भर से आकाश गुणवत्ता रीडिंग",
     "bortleDescriptions": {

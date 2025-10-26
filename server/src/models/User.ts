@@ -21,14 +21,26 @@ export class User {
   @Column({ type: 'varchar', length: 255, unique: true })
   email: string;
 
-  @Column({ type: 'varchar', length: 100, unique: true })
-  username: string;
+  @Column({ type: 'varchar', length: 100, unique: true, nullable: true })
+  username: string | null;
 
-  @Column({ type: 'varchar', length: 255, select: false })
-  password_hash: string;
+  @Column({ type: 'varchar', length: 255, select: false, nullable: true })
+  password_hash: string | null;
 
   @Column({ type: 'varchar', length: 255, nullable: true })
   full_name: string | null;
+
+  @Column({ type: 'varchar', length: 100, nullable: true })
+  state: string | null;
+
+  @Column({ type: 'varchar', length: 100, nullable: true })
+  country: string | null;
+
+  @Column({ type: 'decimal', precision: 10, scale: 8, nullable: true })
+  latitude: number | null;
+
+  @Column({ type: 'decimal', precision: 11, scale: 8, nullable: true })
+  longitude: number | null;
 
   @Column({ type: 'boolean', default: true })
   is_active: boolean;
@@ -63,6 +75,9 @@ export class User {
 
   // Helper method to verify password
   async verifyPassword(password: string): Promise<boolean> {
+    if (!this.password_hash) {
+      return false;
+    }
     return bcrypt.compare(password, this.password_hash);
   }
 }

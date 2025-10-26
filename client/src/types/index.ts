@@ -22,8 +22,10 @@ export enum ProcessingStatus {
 export interface User {
   id: string;
   email: string;
-  username: string;
+  username?: string;
   full_name?: string;
+  state?: string;
+  country?: string;
   created_at: string;
   total_readings?: number;
   total_contributions?: number;
@@ -98,6 +100,37 @@ export interface RegisterRequest {
   username: string;
   password: string;
   full_name?: string;
+}
+
+// OTP-based authentication
+export interface SendOTPRequest {
+  email: string;
+}
+
+export interface SendOTPResponse {
+  message: string;
+  isNewUser: boolean;
+}
+
+export interface VerifyOTPRequest {
+  email: string;
+  otp: string;
+}
+
+export interface VerifyOTPResponse {
+  message: string;
+  isNewUser: boolean;
+  token?: string;
+  user?: User;
+  tempToken?: string; // For new users to complete registration
+}
+
+export interface CompleteProfileRequest {
+  full_name: string;
+  state?: string;
+  country: string;
+  latitude?: number;
+  longitude?: number;
 }
 
 export interface Statistics {

@@ -9,7 +9,9 @@ import { ImpactPage } from './pages/ImpactPage';
 import { BlogPage } from './pages/BlogPage';
 import { ArticleDetailPage } from './pages/ArticleDetailPage';
 import { AdminArticlesPage } from './pages/AdminArticlesPage';
+import { LoginPage } from './pages/LoginPage';
 import { useAuthStore } from './stores/authStore';
+import { GoogleAnalytics } from './components/GoogleAnalytics';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -30,7 +32,9 @@ function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <BrowserRouter>
+        <GoogleAnalytics />
         <Routes>
+          <Route path="/login" element={<LoginPage />} />
           <Route path="/" element={<Layout />}>
             <Route index element={<HomePage />} />
             <Route path="upload" element={<UploadPage />} />

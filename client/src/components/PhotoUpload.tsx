@@ -292,7 +292,7 @@ export const PhotoUpload: React.FC = () => {
               <div className="bg-gray-50 p-4 rounded-lg">
                 <p className="text-sm text-gray-600">{t('upload.sqmValue')}</p>
                 <p className="text-2xl font-bold text-gray-900">
-                  {result.sqm_value?.toFixed(2)}
+                  {result.sqm_value ? Number(result.sqm_value).toFixed(2) : 'N/A'}
                 </p>
                 <p className="text-xs text-gray-500">{t('upload.sqmUnit')}</p>
               </div>
@@ -316,7 +316,7 @@ export const PhotoUpload: React.FC = () => {
               <div className="bg-gray-50 p-4 rounded-lg">
                 <p className="text-sm text-gray-600">{t('upload.skyBrightness')}</p>
                 <p className="text-2xl font-bold text-gray-900">
-                  {result.sky_brightness?.toFixed(1)}
+                  {result.sky_brightness ? Number(result.sky_brightness).toFixed(1) : 'N/A'}
                 </p>
                 <p className="text-xs text-gray-500">{t('upload.brightnessUnit')}</p>
               </div>

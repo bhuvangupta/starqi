@@ -92,7 +92,7 @@ export const Dashboard: React.FC = () => {
               <p className="text-sm text-gray-600">
                 <span className="font-semibold">{t('dashboard.sqmValue')}:</span>{' '}
                 <span className="text-green-600 font-bold">
-                  {stats.best_reading.sqm_value?.toFixed(2)}
+                  {stats.best_reading.sqm_value ? Number(stats.best_reading.sqm_value).toFixed(2) : 'N/A'}
                 </span>{' '}
                 mag/arcsec²
               </p>
@@ -124,7 +124,7 @@ export const Dashboard: React.FC = () => {
               <p className="text-sm text-gray-600">
                 <span className="font-semibold">{t('dashboard.sqmValue')}:</span>{' '}
                 <span className="text-red-600 font-bold">
-                  {stats.worst_reading.sqm_value?.toFixed(2)}
+                  {stats.worst_reading.sqm_value ? Number(stats.worst_reading.sqm_value).toFixed(2) : 'N/A'}
                 </span>{' '}
                 mag/arcsec²
               </p>
